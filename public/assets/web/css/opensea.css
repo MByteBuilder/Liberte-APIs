@@ -1,0 +1,1189 @@
+body{
+    margin-top: 85px;
+}
+
+header{
+    position: fixed;
+    width: 100%;
+    background: none !important;
+    padding: 20px 0px;
+    box-shadow: rgb(4 17 29 / 25%) 0px 0px 8px 0px;
+    background: white !important;
+}
+header .left .nav-link{
+    color: rgba(4, 17, 29, 0.75);
+    font-weight: 600;
+}
+header .right .nav-link{
+    color: rgba(4, 17, 29, 0.75);
+    font-weight: 600;
+}
+header .right .btn{
+    border-color:rgba(4, 17, 29, 0.75);
+    font-weight: 600;
+}
+header .right i{
+    color: rgba(4, 17, 29, 0.75);
+}
+.searchbox input {
+    border: 1px solid #ddd;
+}
+header .right .ti-view-grid{
+    color: white;
+}
+#termNcon a{
+    color: rgba(4, 17, 29, 0.75);
+    font-weight: 600;
+}
+.heroArea{
+    background: url('../img/opensea/bg.png');
+    height: 100vh;
+    background-size: cover;
+    background-position: center center;
+    display: flex;
+    align-items: center;
+}
+.heroArea h1{
+    color: rgb(4, 17, 29);
+    font-size: 45px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+.heroArea p{
+    font-size: 24px;
+    color: rgb(53, 56, 64);
+    line-height: 35px;
+    margin-bottom: 35px;
+}
+.heroArea .btn1{
+    display: inline-flex;
+    flex-direction: row;
+    -webkit-box-align: center;
+    align-items: center;
+    border-radius: 10px;
+    -webkit-box-pack: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 20px;
+    background-color: rgb(32, 129, 226);
+    border: 1px solid rgb(32, 129, 226);
+    color: rgb(255, 255, 255);
+    width: 167px;
+    margin-right: 15px;
+}
+.heroArea .btn2{
+    display: inline-flex;
+    flex-direction: row;
+    -webkit-box-align: center;
+    align-items: center;
+    border-radius: 10px;
+    -webkit-box-pack: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 20px;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(32, 129, 226);
+    color: rgb(32, 129, 226);
+    width: 167px;
+}
+.heroArea .card-img-top{
+    height: 400px;
+    object-fit: cover;
+}
+.cardFooter{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.cardFooter .user{
+    display: flex;
+    align-items: center;
+}
+.cardFooter .user img{
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.cardFooter .user p{
+    margin-bottom: 0px;
+    font-weight: 700;
+    font-size: 14px;
+    color: rgb(4, 17, 29);
+    line-height: normal;
+}
+.cardFooter .user a{
+    color: rgb(32, 129, 226);
+    font-weight: 600;
+}
+.cardFooter i{
+    color: rgb(4, 17, 29);
+    font-size: 20px;
+}
+.heroArea .card{
+    border-radius: 10px;
+    box-shadow: rgb(4 17 29 / 25%) 0px 0px 10px 0px;
+    overflow: hidden;
+}
+.notableDrops h5{
+    text-align: center;
+    font-weight: 600;
+    font-size: 24px;
+    color: rgb(4, 17, 29);
+    margin-bottom: 50px;
+    font-weight: 700;
+}
+#drops .card{
+    border-radius: 10px;
+    overflow: hidden;
+}
+#drops .card .card-body h5{
+    color: white;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+#drops .card .card-body p{
+    color: white;
+    margin-bottom: 40px;
+}
+#drops .card .card-body .btn{
+    padding: 3px 8px;
+    border: 1px solid #fff;
+    color: white;
+    border-radius: 10px;
+}
+#drops .card .card-body p{
+    font-size: 16px;
+    font-weight: 500;
+}
+.bg-green{
+    background: #46734D;
+}
+.bg-brown{
+    background: #532E3A;
+}
+.bg-yellow{
+    background: #9A602F;
+}
+#drops .card .card-body{
+    padding: 25px 15px;   
+}
+#drops .owl-dots.disabled{
+    display: block;
+}
+#drops .owl-dots .owl-dot span{
+    width: 5px;
+    height: 5px;
+}
+#drops .owl-dots .active span{
+    background: #2081E2;
+}
+#drops .owl-nav{
+    position: absolute;
+    width: 100%;
+    top: 56%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#drops .owl-nav button{
+    background: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+#drops .owl-nav .owl-prev{
+    position: relative;
+    right: 25px;
+    border: 1px solid #ddd;
+}
+#drops .owl-nav .owl-next{
+    position: relative;
+    left: 25px;
+    border: 1px solid #ddd;
+}
+#drops .owl-dots{
+    margin-top: 25px;
+}
+.topCollection{
+    padding: 50px 0px;
+}
+.topCollection h5{
+    text-align: center;
+    font-weight: 600;
+    font-size: 24px;
+    color: rgb(4, 17, 29);
+    margin-bottom: 50px;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.topCollection h5 .dropdown{
+    display: inline;
+    margin-left: 10px;
+}
+.topCollection h5 .dropdown .btn{
+    font-size: 24px;
+    padding: 0px;
+    color: #2081E2;
+    font-weight: bold;
+}
+.topCollection h5 .dropdown .btn:focus{
+    box-shadow: none;
+}
+.topCollection .inner{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding: 20px 10px;
+}
+.topCollection .inner .left{
+    display: flex;
+    align-items: center;
+}
+.topCollection .inner .left .num{
+    font-size: 16px;
+}
+.topCollection .inner .left .name h5{
+    margin: 0px;
+    font-size: 16px;
+}
+.topCollection .inner .left .thum img{
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.topCollection .inner .left .name p img{
+    width: 10px;
+    margin-right: 5px;
+}
+.topCollection .inner .left .name p{
+    font-weight: 600;
+    color: #8A939B;
+    margin: 0px;
+    display: flex;
+    align-items: center;
+}
+.topCollection .inner .left .num{
+    font-weight: 600;
+    margin-right: 15px;
+}
+.topCollection .inner .right .up{
+    color: rgb(52, 199, 123);
+    font-size: 16px;
+    margin: 0px;
+    font-weight: 600;
+}
+.topCollection .viewBtn{
+    background: #2081E2;
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 10px 20px;
+    margin-top: 50px;
+}
+
+.create h5{
+    text-align: center;
+    font-size: 24px;
+    color: rgb(4, 17, 29);
+    margin-bottom: 70px;
+    font-weight: 700;
+}
+.create{
+    padding: 50px 0px;
+}
+.create .text-center h5{
+    margin-bottom: 10px;
+    font-size: 18px;
+    margin-top: 10px;
+}
+.create p{
+    font-weight: 500;
+    font-size: 16px;
+    color: rgb(149 149 149);
+    line-height: inherit;
+}
+.create p a{
+    color: #2081E2;
+}
+.resource{
+    padding: 50px 0px;
+}
+.resource h5{
+    text-align: center;
+    font-size: 24px;
+    color: rgb(4, 17, 29);
+    margin-bottom: 70px;
+    font-weight: 700;
+}
+.resource .card h5{
+    font-size: 18px;
+    text-align: left;
+    margin: 0px;
+    color: rgb(53, 56, 64);
+    font-weight: 600;
+}
+.resource .card .card-body{
+    height: 90px;
+    padding: 20px;
+}
+.resource .card{
+    border-radius: 10px;
+    overflow: hidden;
+}
+.catagory{
+    padding: 50px 0px;
+}
+.catagory h5{
+    text-align: center;
+    font-size: 24px;
+    color: rgb(4, 17, 29);
+    margin-bottom: 70px;
+    font-weight: 700;
+}
+.catagory .card{
+    border-radius: 10px;
+    overflow: hidden;
+}
+.catagory .inner h5{
+    margin-bottom: 0px;
+    color: rgb(53, 56, 64);
+    font-size: 20px;
+}
+.catagory .inner{
+    margin-bottom: 40px;
+}
+.filterSidebar{
+    height: calc(100vh - 85px);
+    left: 0px;
+    overflow-y: scroll;
+    background-color: white;
+    position: sticky;
+    top: 85px;
+    width: 100%;
+}
+.filterSidebar .back{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: rgb(4, 17, 29);
+    font-size: 16px;
+    font-weight: 600;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+}
+.filterSidebar .back p{
+    font-size: 18px;
+    margin-bottom: 0px;
+}
+.filterSidebar .back p i{
+    font-size: 20px;
+    color: rgb(4, 17, 29);
+}
+.filterSidebar .back i{
+    font-size: 30px;
+    color: rgb(105, 105, 105);
+}
+.listing .noPadding{
+    padding-left: 0px;
+}
+.filterSidebar .accordion-button{
+    font-size: 18px;
+    color: rgb(4, 17, 29);
+    font-weight: 600;
+    padding: 15px;
+    height: 66px;
+}
+.filterSidebar .accordion-button:not(.collapsed){
+    background-color: white;
+    box-shadow: none;
+}
+.filterSidebar .accordion-item{
+    border: none;
+    border-bottom: 1px solid #ddd;
+}
+.filterSidebar .accordion-body{
+    border-top: 1px solid #ddd;
+    background-color: #FBFDFF;
+    padding: 20px 10px;
+}
+.filterSidebar .accordion-button::after{
+    width: 15px;
+    height: 15px;
+    background-size: 15px;
+}
+.filterSidebar .accordion-body .btn{
+    background-color: white;
+    text-align: left;
+    border: 1px solid #ddd;
+    width: 100%;
+    font-weight: 600;
+    border-radius: 10px;
+}
+.filterSidebar .accordion-body .pr-2{
+    padding-right: 5px;
+}
+.filterSidebar .accordion-body .pl-2{
+    padding-left: 5px;
+}
+.filterSidebar .accordion-body select{
+    padding: 12px;
+    border-radius: 10px;
+    color: rgba(4, 17, 29, 0.75);
+    font-weight: 500;
+}
+.filterSidebar .accordion-body .form-control{
+    padding: 12px;
+    border-radius: 10px;
+}
+.filterSidebar .accordion-body .form-control::placeholder{
+    font-size: 16px;
+}
+.pr-0{
+    padding-right:0px;
+}
+.pl-0{
+    padding-left:0px;
+}
+.paddBtn{
+    padding: 12px;
+    text-align: center;
+}
+.filterSidebar .accordion-body .search{
+    position: relative;
+    margin-bottom: 20px;
+}
+.filterSidebar .accordion-body .search input{
+    padding-left: 40px;
+}
+.filterSidebar .accordion-body .search i{
+    position: absolute;
+    left: 15px;
+    top: 15px;
+}
+.filterSidebar .accordion-body ul li{
+    margin-top: 10px;
+}
+.filterSidebar .accordion-body ul li a{
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 500;
+}
+.filterSidebar .accordion-body ul li a:hover{
+    color: black;
+}
+.filterSidebar .accordion-body ul li a img{
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.filterSidebar .accordion-body ul li a i{
+    color: #2081E2;
+    margin-left: 10px;
+}
+.listing .topbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px 0px;
+}
+.listing .topbar .right{
+    display: flex;
+    align-items: center;
+}
+.listing .topbar .right select{
+    width: 200px;
+    padding: 12px;
+    border-radius: 10px;
+    margin-left: 15px;
+}
+.listing .topbar p{
+    margin-bottom: 0px;
+    font-size: 16px;
+    font-weight: 500;
+}
+.nftGrid .card{
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+.nftGrid .card .card-body{
+    padding: 0px;
+}
+.nftGrid .card .card-body .inner{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 1rem;
+}
+.nftGrid .card .card-body .left p{
+    margin-bottom: 0px;
+    font-weight: 500;
+    line-height: normal;
+}
+.nftGrid .card .card-body .left .name{
+    color: grey;
+}
+.nftGrid .card .card-body .left .author{
+    font-weight: 600;
+}
+.nftGrid .card .card-body .right{
+    text-align: right;
+}
+.nftGrid .card .card-body .right .price{
+    color: grey;
+}
+.nftGrid .card .card-body .right .ether{
+    font-weight: bold;
+    font-size: 16px;
+}
+.nftGrid .card .card-body .right .ether img{
+    width: 10px;
+}
+.nftGrid .card .card-body .right p{
+    margin-bottom: 0px;
+    line-height: normal;
+}
+.nftGrid .card .card-body .right .time{
+    font-size: 12px;
+    color: grey;
+}
+.nftGrid .card .card-body .card-footer{
+    padding: 0.7rem 1rem;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: none;
+    background-image: linear-gradient(rgba(229, 232, 235, 0.392) 0%, rgb(255, 255, 255) 20%);
+}
+.nftGrid .card .card-body .card-footer a{
+    color: #006B88;
+    font-weight: bold;
+}
+.nftGrid .card .card-body .card-footer span{
+    font-size: 14px;
+    color: grey;
+}
+.nftDetails{
+    padding: 50px 0px;
+}
+.nftDetails .card{
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+.nftDetails .card .card-body p{
+    text-align: right;
+    margin: 0px;
+    font-weight: 600;
+    line-height: normal;
+}
+.nftDetails .rightDetails h5{
+    color: #006B88;
+    margin-bottom: 20px;
+}
+.nftDetails .rightDetails h2{
+    margin-bottom: 25px;
+    font-weight: 700;
+}
+.nftDetails .rightDetails ul{
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.nftDetails .rightDetails ul li{
+    display: inline-block;
+    margin-right: 20px;
+    color: rgba(4, 17, 29, 0.6);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+.nftDetails .rightDetails ul li a{
+    color: #006B88;
+    margin-left: 5px;
+}
+.nftDetails .rightDetails ul li i{
+    font-size: 20px;
+    margin-right: 5px;
+}
+.nftDetails .rightDetails .card-header{
+    background: white;
+    padding: 20px;
+    font-size: 16px;
+    color: rgba(4, 17, 29, 0.6);
+    font-weight: 500;
+}
+.nftDetails .rightDetails .card .card-body{
+    padding: 20px;
+}
+.nftDetails .rightDetails .card .card-body p{
+    text-align: left;
+    font-size: 16px;
+    color: rgba(4, 17, 29, 0.6);
+    margin-bottom: 10px;
+}
+.nftDetails .rightDetails .card .card-body h5{
+    font-size: 30px;
+    color: #272B35;
+    font-weight: 700;
+}
+.nftDetails .rightDetails .card .card-body h5 img{
+    width: 15px;
+    position: relative;
+    top: -3px;
+}
+.nftDetails .rightDetails .card .card-body h5 span{
+    font-size: 16px;
+    color: rgba(4, 17, 29, 0.6);
+}
+.nftDetails .rightDetails .card .card-body .btn1{
+    background: #006B88;
+    color: white;
+    font-weight: bold;
+    padding: 10px 50px;
+    border-radius: 10px;
+    margin-right: 10px;
+    font-size: 18px;
+}
+.nftDetails .rightDetails .card .card-body .btn2{
+    color: #006B88;
+    border: 1px solid #006B88;
+    background: white;
+    font-weight: bold;
+    padding: 10px 50px;
+    border-radius: 10px;
+    font-size: 18px;
+}
+.rightDetails .accordion-button:not(.collapsed){
+    background-color: white;
+    color: #272B35;
+    font-weight: 500;
+}
+.rightDetails .accordion .accordion-item .accordion-button{
+    padding: 20px;
+    font-size: 18px;
+    color: #272B35;
+    font-weight: 700;
+}
+.rightDetails .accordion .accordion-item .accordion-button i{
+    margin-right: 5px;
+}
+.rightDetails .accordion .accordion-item h2{
+    margin-bottom: 0px;
+}
+.rightDetails .accordion .accordion-item{
+    border-radius: 10px;
+    overflow: hidden;
+}
+.rightDetails .accordion .accordion-item tr th{
+    border-bottom: 1px solid #ddd;
+}
+.rightDetails .accordion .accordion-item tr td img{
+    width: 12px;
+    margin-right: 5px;
+}
+.rightDetails .accordion .accordion-item tr td span{
+    font-weight: 600;
+}
+.rightDetails .accordion .accordion-item tr td a{
+    color: #006B88;
+}
+.rightDetails .accordion .accordion-item tr td{
+    vertical-align: middle;
+    color: #272B35;
+}
+.rightDetails .accordion .accordion-item .table{
+    margin-bottom: 0px;
+}
+.rightDetails .accordion{
+    margin-bottom: 20px;
+}
+.rightDetails .accordion .accordion-item select{
+    padding: 12px;
+    border-radius: 10px;
+    width: 200px;
+}
+.rightDetails .accordion .accordion-item .noItem p{
+    margin-bottom: 0px;
+    font-size: 18px;
+    font-weight: 500;
+}
+.leftDetails .accordion .accordion-button:not(.collapsed){
+    background-color: white;
+}
+.leftDetails .accordion .accordion-button{
+    padding: 20px;
+    font-size: 18px;
+    color: #272B35;
+    font-weight: 700;
+}
+.leftDetails .accordion{
+    border-radius: 10px;
+}
+.leftDetails .accordion .accordion-button i{
+    margin-right: 5px;
+}
+.leftDetails .accordion p{
+    font-size: 16px;
+}
+.leftDetails .accordion p a{
+    color: #006B88;
+}
+.leftDetails .accordion .accordion-item .h-200{
+    overflow-y: scroll;
+    height: 200px;
+}
+.leftDetails .accordion .accordion-item .wrapper{
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid #006B88;
+    background-color: #EDF9FE;
+    padding: 10px 5px;
+    margin-bottom: 20px;
+}
+.leftDetails .accordion .accordion-item .wrapper h6{
+    font-size: 12px;
+    color: #006B88;
+}
+.leftDetails .accordion .accordion-item .wrapper h5{
+    font-size: 16px;
+}
+.leftDetails .accordion .accordion-item .wrapper p{
+    font-size: 13px;
+    margin-bottom: 0px;
+}
+.text-right{
+    text-align: right;
+}
+.accordion .accordion-button:not(.collapsed) {
+    background-color: white;
+}
+.accordion .accordion-item .accordion-button {
+    padding: 20px;
+    font-size: 18px;
+    color: #272B35;
+    font-weight: 700;
+}
+.accordion .accordion-item .accordion-button i {
+    margin-right: 5px;
+}
+.accordion .accordion-item {
+    border-radius: 10px;
+    overflow: hidden;
+}
+.viewCollection{
+    background-color: #006B88;
+    color: white;
+    font-weight: 600;
+    padding: 10px 30px;
+    border-radius: 10px;
+}
+.exploreCollection .heading{
+    text-align: center;
+    padding: 50px 0px;
+    font-weight: bold;
+    font-size: 40px;
+}
+.exploreCollection .nav-tabs .nav-link.active{
+    border: none;
+    border-bottom: 3px solid #006B88;
+    color: rgb(53, 56, 64);
+}
+.exploreCollection .nav-tabs .nav-link{
+    font-size: 17px;
+    color: #272B35;
+    font-weight: 600;
+    color: rgb(112, 122, 131);
+}
+.exploreCollection .nav-tabs .nav-link:hover{
+    border: none;
+    outline: none;
+    margin-bottom: 0px;
+    border-radius: 0;
+}
+.exploreCollection .tab-content .card-body{
+    text-align: center;
+    padding: 25px;
+}
+.exploreCollection .tab-content .card .thumb{
+    width: 50px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: rgb(14 14 14 / 60%) 0px 0px 2px 0px;
+    margin-top: -80px;
+}
+.exploreCollection .tab-content .card{
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+.exploreCollection .tab-content{
+    padding: 50px 0px;
+}
+.exploreCollection .tab-content .card h5{
+    font-size: 18px;
+    margin-bottom: 0px;
+}
+.exploreCollection .tab-content .card p{
+    color: rgb(112, 122, 131);
+    font-size: 16px;
+    font-weight: 400;
+}
+.exploreCollection .tab-content .card p a{
+    color: #006B88;
+    font-weight: 500;
+}
+.exploreCollection .tab-content .card p i{
+    color: #006B88;
+}
+.exploreCollection .tab-content .card .card-img-top{
+    height: 200px;
+    object-fit: cover;
+}
+.ranking .topPart {
+    text-align: center;
+    padding: 50px 0px;
+}
+.ranking .topPart h2{
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.ranking .topPart p{
+    font-size: 16px;
+    color: rgb(112, 122, 131);
+    margin-bottom: 30px;
+}
+.ranking .topPart select{
+    padding: 12px;
+    border-radius: 10px;
+    color: #272B35;
+    font-weight: 600;
+}
+.ranking .table .name{
+    font-weight: 600;
+}
+.ranking .table .name img{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin: 0px 10px;
+}
+.ranking .table tr td{
+    vertical-align: middle;
+    font-weight: 600;
+    font-size: 17px;
+    padding: 16px;
+}
+.ranking .table tr td p{
+    margin: 0px;
+    font-weight: 600;
+    font-size: 17px;
+}
+.ranking .table .volume img{
+    width: 12px;
+}
+.ranking .table .floorPrice img{
+    width: 12px;
+}
+.ranking .table tr td .up{
+    color: rgb(52, 199, 123);
+}
+.ranking .table tr td .down{
+    color: rgb(235, 87, 87);
+}
+.ranking .table tr th{
+    border-bottom: 1px solid #ddd;
+    padding: 25px 16px;
+    font-size: 17px;
+}
+.table>:not(:last-child)>:last-child>*{
+    border-bottom-color: #ddd;
+}
+.ranking .pagination{
+    justify-content: center;
+    margin-top: 25px;
+    margin-bottom: 50px;
+}
+.ranking .pagination .page-link{
+    border-radius: 10px !important;
+    font-size: 17px;
+    font-weight: 600;
+    color: rgb(112, 122, 131);
+}
+.ranking .pagination .active .page-link{
+    background-color: white !important;
+    border: none !important;
+    color: #E1E3E5;
+}
+.page-item:not(:first-child) .page-link {
+    margin-left: 0;
+}
+.activity tr th{
+    padding: 35px 16px;
+    font-size: 17px;
+}
+.activity tr td{
+    font-weight: 500;
+    padding: 16px;
+    vertical-align: middle;
+    border-bottom: none;
+}
+.activity tr td .name{
+    display: flex;
+    align-items: center;
+}
+.activity tr td .name img{
+    width: 50px;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+.activity tr td .name p{
+    margin-bottom: 0px;
+    color: grey;
+    font-weight: 500;
+}
+.activity tr td .name h5{
+    font-size: 16px;
+}
+.activity tr td .price h6 img{
+    width: 10px;
+}
+.activity tr td .price h6 {
+    margin-bottom: 0px;
+}
+.activity tr td .price p {
+    margin-bottom: 0px;
+    color: grey;
+    font-weight: 500;
+}
+.activity tr td a{
+    color: #006B88;
+}
+.reffer{
+    padding: 50px 0px;
+}
+.reffer .headingArea{
+    text-align: center;
+}
+.reffer .headingArea h2{
+    font-size: 30px;
+}
+.reffer .headingArea p{
+    font-size: 17px;
+    color: rgb(112, 122, 131);
+}
+.reffer .headingArea p a{
+    color: #006B88;
+}
+.createNft{
+    padding: 50px 0px;
+    color: #04111D;
+}
+small,p{
+    color: rgb(112, 122, 131);
+    font-weight: 400;
+}
+.createNft h5{
+    font-size: 18px;
+}
+.createNft .dropfile{
+    width: 350px;
+    height: 250px;
+    border: 2px dashed #B3B3B3;
+    border-radius: 10px;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.createNft .dropfile i{
+    font-size: 70px;
+    color: #D9D9D9;
+}
+.createNft .dropfile input{
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+}
+.createNft .container2{
+    max-width: 800px;
+    margin: auto;
+}
+.createNft .form-control{
+    border-color: #e4e4e4;
+    padding: 12px;
+    border-radius: 10px;
+}
+.createNft label{
+    color: #272B35;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.createNft .colection .form-select{
+    padding: 12px;
+    font-size: 14px;
+    color: gray;
+    border-radius: 10px;
+    border-color: #e4e4e4;
+}
+.createNft .colection ul{
+    margin: 0;
+    margin: 0;
+}
+.createNft .colection ul li{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e4e4e4;
+    padding: 15px 0px;
+}
+.createNft .colection ul li .left{
+    display: flex;
+}
+.createNft .colection ul li .left h5{
+    margin-bottom: 0;
+}
+.createNft .colection ul li .left p{
+    margin-bottom: 0;
+    font-size: 16px;
+    color: #272B35;
+}
+.createNft .colection ul li .left span{
+    margin-right: 10px;
+    font-weight: bold;
+}
+.createNft .colection ul li .right span{
+    color: #006B88;
+    border: 1px solid #006B88;
+    border-radius: 10px;
+    padding: 10px;
+}
+.createNft .colection ul li .right .form-check-input{
+    width: 50px;
+    height: 25px;
+}
+.createNft .btnCreate{
+    background-color: #006B88;
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+    border-radius: 10px;
+    padding: 12px 30px;
+}
+.myCollection .coverImg{
+    height: 200px;
+    background: #E5E8EB;
+}
+.myCollection .collectionDetails{
+    text-align: center;
+    margin-top: -75px;
+}
+.collectionDetails .userImg{
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+.collectionDetails ul{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    margin: 15px 0px;
+}
+.collectionDetails ul li img{
+    width:14px;
+}
+.collectionDetails ul li{
+    width: 150px;
+    border: 1px solid #e4e4e4;
+    padding: 10px;
+}
+.collectionDetails ul li h2{
+    font-size: 25px;
+}
+.collectionDetails ul li p{
+    margin-bottom: 0;
+}
+.collectionDetails ul li:first-child{
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+.collectionDetails ul li:last-child{
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.collectionDetails .maxWidth500{
+    max-width: 600px;
+    margin: auto;
+}
+.collectionDetails .description{
+    font-size: 16px;
+    color: gray;
+    font-weight: 400;
+}
+.collectionDetails .uniqueId{
+    display: inline-block;
+    color: gray;
+    font-size: 18px;
+    border: 1px solid #d8d8d8;
+    border-radius: 50px;
+    padding: 5px 10px;
+}
+.collectionDetails .uniqueId img{
+    width: 12px;
+    margin-right: 5px;
+}
+.myCollection .tabs ul {
+    border-bottom: 1px solid #ececec;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+}
+.myCollection .tabs ul li{
+    font-size: 18px;
+    color: gray;
+    font-weight: 500;
+    display: flex;
+    padding: 15px 20px;
+    align-items: center;
+}
+
+.myCollection .tabs ul .active{
+    border-bottom: 3px solid #006B88;
+}
+
+.myCollection .tabs ul li span{
+    margin-right: 10px;
+}
+.myCollection .tabs ul li span:last-child{
+    margin-right: 0;
+    margin-left: 10px;
+}
+
+
+
+@media (min-width: 1200px){
+.container, .container-lg, .container-md, .container-sm, .container-xl {
+    max-width: 1260px;
+}}

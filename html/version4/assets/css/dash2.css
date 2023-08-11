@@ -1,0 +1,599 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:200,200i,300,300i,400,400i,500,500i,600,600i,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Poppins:200,200i,300,300i,400,400i,500,500i,600,600i,700&display=swap");
+/* line 1, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/_extend.scss */
+.flex-center-start {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+}
+
+@font-face {
+  font-family: resolve;
+  src: url(../fonts/Resolve-Light.otf);
+}
+
+/* Normal desktop :1200px. */
+/* Normal desktop :992px. */
+/* Tablet desktop :768px. */
+/* small mobile :320px. */
+/* Large Mobile :480px. */
+/* 1. Theme default css */
+/* line 5, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+body {
+  font-weight: normal;
+  font-style: normal;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* line 12, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+.img {
+  max-width: 100%;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+}
+
+/* line 16, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+a,
+.button {
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+}
+
+/* line 20, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+a:focus,
+.button:focus, button:focus {
+  text-decoration: none;
+  outline: none;
+}
+
+/* line 25, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+a:focus {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* line 29, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+a:focus,
+a:hover,
+.portfolio-cat a:hover,
+.footer -menu li a:hover {
+  text-decoration: none;
+}
+
+/* line 36, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+a,
+button {
+  color: #272B35;
+  outline: medium none;
+  text-decoration: none;
+}
+
+
+
+
+/* line 54, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+ul {
+  margin: 0px;
+  padding: 0px;
+}
+
+/* line 58, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+li {
+  list-style: none;
+}
+
+/* line 61, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+
+
+/* line 70, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+label {
+  color: #7e7e7e;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* line 76, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+*::-moz-selection {
+  background: #444;
+  color: #fff;
+  text-shadow: none;
+}
+
+/* line 81, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+::-moz-selection {
+  background: #444;
+  color: #fff;
+  text-shadow: none;
+}
+
+/* line 86, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+::selection {
+  background: #444;
+  color: #fff;
+  text-shadow: none;
+}
+
+/* line 91, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+*::-webkit-input-placeholder {
+  color: #cccccc;
+  font-size: 14px;
+  opacity: 1;
+}
+
+/* line 96, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+*:-ms-input-placeholder {
+  color: #cccccc;
+  font-size: 14px;
+  opacity: 1;
+}
+
+/* line 101, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+*::-ms-input-placeholder {
+  color: #cccccc;
+  font-size: 14px;
+  opacity: 1;
+}
+
+/* line 106, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+*::placeholder {
+  color: #cccccc;
+  font-size: 14px;
+  opacity: 1;
+}
+
+/* line 112, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+h3 {
+  font-size: 24px;
+}
+
+/* line 116, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+.mb-65 {
+  margin-bottom: 67px;
+}
+
+/* line 120, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+.black-bg {
+  background: #020c26 !important;
+}
+
+/* line 124, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+.white-bg {
+  background: #ffffff;
+}
+
+/* line 127, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+.gray-bg {
+  background: #f5f5f5;
+}
+
+header .container-fluid{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 1px 0px 10px 0px rgb(0 0 0 / 20%);
+    height: 60px;
+    width: 100%;
+    position: fixed;
+    background-color: white;
+    top: 0px;
+    left: 0px;
+    z-index: 1111111;
+}
+header .middle ul{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+header .middle ul li{
+    padding: 0px 10px;
+    text-align: center;
+}
+header .middle ul li a{
+    font-size: 14px;
+    font-weight: 500;
+    color: #858585;
+}
+header .middle ul li a i{
+    display: block;
+}
+header .left{
+    width: 25%;
+    text-align: left;
+    font-size: 18px;
+    font-weight: 600;
+}
+header .right{
+    width: 25%;
+    text-align: right;
+}
+header .right p {
+    margin-bottom: 0px;
+    font-size: 11px;
+    line-height: 1;
+    text-align: left;
+}
+header .left i{
+    margin-right: 10px;
+}
+header .right .user .userImg{
+    background-color: #FC322E;
+    border-radius: 50%;
+    color: white;
+    width:30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin-right: 5px;
+}
+header .right .user{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+header .right ul{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+header .right ul li{
+    margin-left: 20px;
+}
+header .right ul li i{
+    font-size: 20px;
+}
+header .right ul li a{
+    position: relative;
+}
+header .right ul li a .count{
+    position: absolute;
+    top: -5px;
+    right: -2px;
+    background-color: #FC322E;
+    border-radius: 50%;
+    color: white;
+    width: 15px;
+    height: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+}
+.bodySection{
+    margin-top: 75px;
+}
+.bodySection .userDetail{
+    background-color: white;
+    border-radius: 8px;
+}
+.bodySection .userDetail .upper{
+    padding: 20px;
+    padding-bottom: 0px;
+}
+.bodySection .userDetail h3{
+    color: #4F4F50;
+    margin-bottom: 0px;
+    font-weight: bold;
+}
+.bodySection .userDetail h6{
+    color: #4F4F50;
+}
+
+.bodySection .userDetail .gMember{
+    color: goldenrod;
+    font-weight: 600;
+    font-size: 16px;
+}
+.bodySection .userDetail ul li{
+    padding: 10px 20px;
+}
+.bodySection .userDetail ul li a{
+    font-weight: 500;
+    color: #858585;
+}
+.bodySection .userDetail ul .active{
+    background-color: #F1F6DF;
+    border-right: 3px solid #CD4B4F;
+}
+.bodySection .userDetail ul .active a{
+    color: #14A0BB;
+}
+.recentTransaction{
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+.recentTransaction th{
+    font-size: 13px;
+    padding:5px 0px;
+    color: #858585;
+}
+.recentTransaction th:first-child{
+    color: #14A0BB;
+    font-weight: 700;
+}
+.table>:not(caption)>*>*{
+    border-bottom: none;
+}
+.recentTransaction td{
+    font-size: 14px;
+    padding: 5px 0px;
+    color: #858585;
+}
+.recentTransaction td:last-child{
+    text-align: center;
+}
+.recentTransaction thead{
+    margin-bottom: 15px;
+}
+.myAccount{
+    padding: 20px;
+    border-radius: 8px;
+    background-color: white;
+}
+.myAccount h5{
+    color:#4F4F50;
+    font-size: 24px;
+    font-weight: 700;
+}
+.intermiles p{
+    margin-bottom: 0px;
+}
+
+.intermiles .total .wrapper{
+    box-shadow: 1px 1px 6px 1px #efefef;
+    border-radius: 8px;
+    padding: 15px;
+}
+.intermiles h2{
+    margin-bottom: 0px;
+    color: #4F4F50;
+    font-size: 35px;
+    font-weight: bold;
+}
+.intermiles{
+    margin-top: 25px;
+}
+.intermiles .eligible .wrapper{
+    box-shadow: 1px 1px 6px 1px #efefef;
+    border-radius: 8px;
+    padding: 15px;
+}
+.intermiles .total{
+    padding-right: 0px;
+}
+.intermiles .eligible{
+    padding-right: 0px;
+}
+.intermiles .detail .wrapper{
+    padding-left: 30px;
+}
+.intermiles .detail .wrapper a{
+    font-weight: 600;
+    color: #14A0BB;
+}
+.intermiles .detail .wrapper p{
+    font-weight: 600;
+}
+.intermileCard{
+    margin-top: 0px;
+}
+.intermileCard .cardBottom{
+    background-color: #F4F4F4;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 15px;
+}
+.intermileCard .cardBottom p{
+    font-weight: 600;
+    margin-bottom: 0px;
+}
+.intermileCard .cardBottom a{
+    color: #275ba7;
+    font-weight: 600;
+}
+.intermileCard .cardTop{
+    height: 180px;
+    background: url('https://cdn1.vectorstock.com/i/1000x1000/51/45/gold-background-texture-golden-metal-shiny-vector-31495145.jpg');
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 15px;
+    position: relative;
+}
+.intCard{
+    border-radius: 10px;
+}
+.intermileCard .cardTop h3{
+    color: white;
+    font-size: 40px;
+}
+.intermileCard .cardTop .expireDate{
+    position: absolute;
+    bottom: 0px;
+    color: white;
+    font-weight: 600;
+}
+.progress-bar{
+    background-color: #275ba7;
+}
+.cardDetails b{
+    text-transform: uppercase;
+}
+
+.cardDetails a{
+    font-weight: 600;
+    font-size: 16px;
+    color: #275ba7;
+}
+.cardDetails .progress{
+    margin-bottom: 10px;
+    height: 20px;
+}
+.intermileCard .cardTop .d-flex{
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+.intermileCard .cardTop .d-flex p{
+    color: rgb(56, 56, 56);
+    font-weight: bold;
+    font-size: 20px;
+}
+.intermileCard .cardTop .d-flex p span{
+    color: #CD4B4F;
+}
+.myActivity{
+    margin-top: 20px;
+}
+.nav-tabs .nav-link.active{
+    border: none;
+    border-bottom: 2px solid #CD4B4F;
+    color: #CD4B4F;
+    font-weight: 600;
+}
+.nav-tabs .nav-link{
+    color: #858585;
+    font-weight: 600;
+}
+.totalEarned{
+    box-shadow: 1px 1px 6px 1px #efefef;
+    padding: 15px;
+    border-radius: 8px;
+}
+.totalEarned h3{
+    color: #4F4F50;
+    margin-bottom: 0px;
+    text-align: center;
+    font-size: 35px;
+    font-weight: 700;
+    margin-top: 35px;
+}
+.totalEarned p{
+    color: #4F4F50;
+    margin-bottom: 30px;
+    text-align: center;
+}
+.tab-content .heading{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 0px;
+}
+.tab-content .heading p{
+    margin: 0px;
+}
+.tab-content .heading .btn{
+    color: #275ba7;
+    border: 1px solid #275ba7;
+    font-weight: 600;
+}
+.totalEarned .badge{
+    color: #CD4B4F;
+    background: rgba(205, 75, 79,0.1);
+    padding: 7px;
+    font-size: 14px;
+}
+.tab-content table th{
+    color: #858585;
+}
+.tab-content table td{
+    font-size: 14px;
+    color: #858585;
+}
+
+.tab-content table td .purple{
+    color: #AF8AFE;
+}
+.tab-content table td .blue{
+    color: #9CC3FF;
+}
+.tab-content table td .pink{
+    color: #FFA6A0;
+}
+.tab-content table td .yellow{
+    color: #C1E681;
+}
+.nft{
+    padding: 50px 0px;
+    border-top: 1px solid #dee2e6;
+    margin-top: 50px;
+}
+.nft .nftWrapper{
+    background-image: url('../img/promo.png');
+    height: 100px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 8px;
+    padding: 20px;
+}
+.nft .nftWrapper h5{
+    color: white;
+}
+.nft .nftWrapper p{
+    color: white;
+}
+.nft .wrapper{
+    box-shadow: 1px 1px 6px 1px #efefef;
+    border-radius: 8px;
+    padding: 15px;
+}
+.nft .wrapper p{
+    margin-bottom: 0px;
+}
+.nft .wrapper h3{
+    color: #4F4F50;
+    font-size: 30px;
+    font-weight: bold;
+}
+.padNo{
+    padding: 0px;
+}
+.nft .table{
+    margin-top: 40px;
+}
+.nft .table tr img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.nft .table .imgNFT{
+    display: flex;
+    align-items: center;
+}
+.nft .table .imgNFT h6{
+    margin-bottom: 0px;
+}
+.nft .table .imgNFT p{
+    margin-bottom: 0px;
+}
+.ml-2{
+    margin-left: 10px;
+}
+.nft .table td{
+    font-size: 14px;
+    color: #858585;
+    vertical-align: middle;
+}
+.nft .table th{
+    color: #4F4F50;
+}
+
+.nft .table thead th{
+    padding-bottom: 20px;
+}

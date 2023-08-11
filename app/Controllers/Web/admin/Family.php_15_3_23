@@ -1,0 +1,45 @@
+<?php
+
+    namespace App\Controllers\Web\admin;
+    use App\Controllers\BaseController;
+    use App\Models\Operation;
+
+    class Family extends BaseController{
+        public function family_rel(){
+            $operation = new Operation();
+            $session = \Config\Services::session();
+           
+            // $data = array(
+            //     'pageTitle' => 'User List'
+            // );
+            // $session_id = $session->get("lbt_admin_id");
+            // $apiUrl = 'usertable-list';
+            // $apiData = array(
+            //       //"id"  => $id,
+            // );
+            // $Datalist = $operation->get_api($apiUrl,$apiData);
+            
+            // if(!empty($Datalist->status == true)){
+            //     $data['user_data'] = $Datalist->data;
+            // }else{
+            //     $data['user_data'] = '';
+            // }
+            // echo "<pre>";
+            // print_r($data);
+            // die();
+            //echo "hello";
+            ///////////////////////////////////
+            //if($session_id != ""){
+                echo view('web/admin/includes/header');
+                echo view('web/admin/includes/leftbar');
+                //echo view('web/admin/user_table/user_tablelist',$data);
+                
+                
+                //echo view('web/admin/includes/footer');
+            //}else{
+                 //return redirect()->to(base_url('console'));  
+             //}
+            
+        }
+    }
+?>

@@ -1,0 +1,488 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:200,200i,300,300i,400,400i,500,500i,600,600i,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Poppins:200,200i,300,300i,400,400i,500,500i,600,600i,700&display=swap");
+/* line 1, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/_extend.scss */
+.flex-center-start {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+}
+
+@font-face {
+  font-family: resolve;
+  src: url(../fonts/Resolve-Light.otf);
+}
+
+/* Normal desktop :1200px. */
+/* Normal desktop :992px. */
+/* Tablet desktop :768px. */
+/* small mobile :320px. */
+/* Large Mobile :480px. */
+/* 1. Theme default css */
+/* line 5, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+body {
+  font-weight: normal;
+  font-style: normal;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  color: #858585;
+}
+
+/* line 12, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+.img {
+  max-width: 100%;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+}
+
+/* line 16, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+a,
+.button {
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+}
+
+/* line 20, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+a:focus,
+.button:focus, button:focus {
+  text-decoration: none;
+  outline: none;
+}
+
+/* line 25, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+a:focus {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* line 29, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+a:focus,
+a:hover,
+.portfolio-cat a:hover,
+.footer -menu li a:hover {
+  text-decoration: none;
+  color: #e4e4e4;
+}
+
+/* line 36, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+a,
+button {
+  color: #272B35;
+  outline: medium none;
+  text-decoration: none;
+}
+
+/* line 41, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+h1, h2, h3, h4, h5 {
+  color: #858585;
+}
+
+/* line 45, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
+  color: #858585;
+}
+
+/* line 54, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+ul {
+  margin: 0px;
+  padding: 0px;
+}
+
+/* line 58, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+li {
+  list-style: none;
+}
+
+/* line 61, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+p {
+  font-size: 14px;
+  line-height: 28px;
+  color: #858585;
+  margin-bottom: 13px;
+}
+
+/* line 70, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+label {
+  color: #7e7e7e;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* line 76, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+*::-moz-selection {
+  background: #444;
+  color: #fff;
+  text-shadow: none;
+}
+
+/* line 81, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+::-moz-selection {
+  background: #444;
+  color: #fff;
+  text-shadow: none;
+}
+
+/* line 86, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+::selection {
+  background: #444;
+  color: #fff;
+  text-shadow: none;
+}
+
+/* line 91, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+*::-webkit-input-placeholder {
+  color: #cccccc;
+  font-size: 14px;
+  opacity: 1;
+}
+
+/* line 96, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+*:-ms-input-placeholder {
+  color: #cccccc;
+  font-size: 14px;
+  opacity: 1;
+}
+
+/* line 101, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+*::-ms-input-placeholder {
+  color: #cccccc;
+  font-size: 14px;
+  opacity: 1;
+}
+
+/* line 106, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+*::placeholder {
+  color: #cccccc;
+  font-size: 14px;
+  opacity: 1;
+}
+
+/* line 112, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+h3 {
+  font-size: 24px;
+}
+
+/* line 116, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+.mb-65 {
+  margin-bottom: 67px;
+}
+
+/* line 120, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+.black-bg {
+  background: #020c26 !important;
+}
+
+/* line 124, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+.white-bg {
+  background: #ffffff;
+}
+
+/* line 127, C:/Users/SPN Graphics/Desktop/CL September/210 Medical/HTML/scss/theme-default.scss */
+.gray-bg {
+  background: #f5f5f5;
+}
+
+.row{
+    margin: 0px;
+}
+
+.sidebar{
+    background-color: #006B88;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    width: 16.6666%;
+    overflow-y: scroll;
+}
+.sidebar .logo{
+    margin-top: 30px;
+    margin-bottom: 60px;
+}
+.sidebar .logo img{
+    width: 70%;
+    display: block;
+    margin: auto;
+}
+.sidebar ul li{
+    margin: 35px 0px;
+    text-align: center;
+}
+.sidebar ul .active a{
+    padding: 15px;
+    background-color: white;
+    border-radius: 10px;
+    color: black;
+}
+.sidebar ul li a{
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+}
+.sidebar ul li a i{
+    font-size: 20px;
+}
+::-webkit-scrollbar {
+    width: 5px;
+}
+.topbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 0px;
+}
+.topbar .left{
+    display: flex;
+    align-items: center;
+}
+
+.topbar .left .search{
+    position: relative;
+}
+.topbar .left .search i{
+    position: absolute;
+    left: 15px;
+    top: 8px;
+    color: white;
+}
+.topbar .left h5{
+    margin: 0;
+    font-size: 22px;
+    color: rgb(59, 59, 59);
+    margin-right: 100px;
+}
+.topbar .left input{
+    padding-left: 40px;
+    border-radius: 10px;
+    background-color: #006B88;
+    color: white;
+}
+.topbar .left input::placeholder{
+    color: white;
+}
+.topbar .left .dropdown .btn{
+    display: flex;
+    align-items: center;
+    text-align: left;
+    margin-left: 20px;
+}
+.topbar .left .dropdown .btn h6{
+    margin: 0px;
+    font-size: 14px;
+}
+.topbar .left .dropdown .btn p{
+    margin: 0px;
+    line-height: 1;
+    font-size: 12px;
+}
+.topbar .left .dropdown .btn i{
+    color: #006B88;
+    margin-right: 10px;
+}
+.topbar .right{
+    display: flex;
+    align-items: center;
+}
+.topbar .right ul{
+    display: flex;
+    align-items: center;
+    margin-right:40px
+}
+.topbar .right ul li i{
+    color: #006B88;
+    font-size: 20px;
+    margin-left: 15px;
+}
+.profile{
+    display: flex;
+    align-items: center;
+}
+.profile .userName{
+    text-align: right;
+}
+.profile .userName h6{
+    margin: 0;
+    color: rgb(59, 59, 59);
+}
+.profile .userName p{
+    margin: 0;
+    line-height: 1;
+}
+.profile .userImg{
+    width: 40px;
+    margin-left: 10px;
+    border-radius: 10px;
+}
+.pl-0{
+    padding-left: 0px;
+}
+.pr-0{
+    padding-right: 0px;
+}
+.bodySection .wrapper{
+    background-color: #F7F7F7;
+    border-radius: 10px;
+    padding: 20px;
+}
+.bodySection .wrapper h5{
+    color: rgb(59, 59, 59);
+    margin-bottom: 20px;
+}
+.bodySection .wrapper .inner{
+    display: flex;
+    align-items: center;
+}
+.bodySection .wrapper .inner p{
+    margin-bottom: 5px;
+    line-height: 1;
+}
+.bodySection .wrapper .inner h5{
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+.bodySection .wrapper .inner h6{
+    margin-bottom: 0px;
+    font-size: 13px;
+    font-weight: 700;
+}
+.bodySection .wrapper .inner i{
+    background-color: #006B88;
+    border-radius: 10px;
+    color: white;
+    padding: 10px 14px;
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.bodySection .wrapper2{
+    background-color: #006B88;
+    border-radius: 10px;
+    padding: 20px;
+}
+.bodySection .wrapper2 a{
+    color: white;
+    text-align: center;
+    font-size: 13px;
+}
+.bodySection .wrapper2 i{
+    display: block;
+    font-size: 25px;
+}
+.bodySection .msg{
+    margin-top: 30px;
+    background-color: #F7F7F7;
+    padding: 20px;
+    border-radius: 10px;
+}
+.bodySection .msg h5{
+    color: rgb(59, 59, 59);
+    margin-bottom: 20px;
+}
+.bodySection .msg ul li{
+    margin-bottom: 20px;
+}
+.bodySection .msg ul li a{
+    display: flex;
+    align-items: center;
+}
+.bodySection .msg ul li a .user{
+    width: 40px;
+    margin-right: 10px;
+    border-radius: 10px;
+}
+.bodySection .msg ul li a h6{
+    margin: 0;
+    font-size: 14px;
+}
+.bodySection .msg ul li a p{
+    margin: 0;
+}
+.bodySection .add{
+    margin-top: 30px;
+}
+.bodySection .add ul{
+    display: flex;
+    align-items: center;
+}
+.bodySection .add ul li .btn{
+    background-color: #006B88;
+    color: white;
+    border-radius: 10px;
+    font-size: 14px;
+    margin-right: 15px;
+    font-weight: 600;
+    padding: 10px 20px;
+}
+.bodySection .add ul li .btn i{
+    margin-right: 5px;
+}
+.bodySection .add .userreview h5{
+    color: rgb(59, 59, 59);
+}
+.bodySection .add .userreview .reviews{
+    background-color: #F7F7F7;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.bodySection .add .userreview .reviews i{
+    color: #006B88;
+    font-size: 20px;
+}
+.bodySection .add .userreview .reviews .botto{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.bodySection .add .userreview .reviews .botto .user{
+    display: flex;
+    align-items: center;
+}
+.bodySection .add .userreview .reviews .botto .user img{
+    width: 40px;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+.bodySection .add .userreview .reviews .botto .user h6{
+    margin-bottom: 0;
+    color: rgb(59, 59, 59);
+}
+.bodySection .add .userreview .reviews .botto .user p{
+    margin-bottom: 0;
+}
+.bodySection .add .userreview .reviews .botto ul li a{
+    font-size: 14px;
+    margin-left: 15px;
+}
+.bodySection .add .userreview .reviews .botto ul li .red{
+    color: tomato;
+    font-weight: 600;
+}
+.bodySection .add .userreview .reviews .botto ul li .accept{
+    color: green;
+    font-weight: 600;
+}
+.bodySection .add .chart{
+    margin-top: 50px;
+}
+.bodySection .add .chart h5{
+    color: rgb(59, 59, 59);
+    margin-bottom: 20px;
+}
+.btn:focus{
+    box-shadow: none;
+}

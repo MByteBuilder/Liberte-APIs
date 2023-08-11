@@ -1,0 +1,339 @@
+<?php
+    namespace App\Controllers\Api\v1;
+    use App\Controllers\ApiController;
+    use App\Models\Operation;
+    use App\Models\Mailler;
+
+
+    class Users extends ApiController{
+
+        public function login() {
+            $operation = new Operation();
+            $loginType = $this->input_post("login_type"); // 1=normal, 2=gmail, 3 = fb, 4=twitter, 5=instagram 6=metamask
+            $deviceType = $this->input_post("device_type"); // 1= web, 2= android, 3=iOS 
+            $deviceToken = $this->input_post("device_token"); 
+            if( (strlen($loginType) > 0) ){
+                // =============== normal login section =============== //
+                if($loginType == 1){
+                    $email = $this->input_post("email");
+                    $password = $this->input_post("password");
+                    if( (strlen($email) > 0) && (strlen($password) > 0) ){
+                        $getUserData = $operation->get_data("users",'*',array("email"=>$email,"password"=>md5($password)));
+                        if($getUserData["num_rows"] > 0){
+                            $checkEmailVerification = $getUserData["result"][0]->email_verify;
+                            if($checkEmailVerification == 0){
+                                return $this->error_response("Sorry! Please verify your email address!");
+                            }else{
+                                $getUserData = $this->user_details($getUserData["result"]);
+                                return $this->success_response("Welcome! Login successfully!",$getUserData);
+                            }
+                        }else{
+                            return $this->error_response("Sorry! Invalid login credential!");
+                        }
+                    }else{
+                        return $this->error_response("Sorry! For normal login, email and password required!");
+                    }
+                }
+                // =============== normal login section =============== //
+
+                // =============== gmail login section =============== //
+                if($loginType == 2){
+                    $email = $this->input_post("email");
+                    $socialId = $this->input_post("social_id");
+                    if( (strlen($email) > 0) && (strlen($socialId) > 0) ){
+                        $getUserData = $operation->get_data("users",'*',array("email"=>$email,"social_id"=>$socialId));
+                        if($getUserData["num_rows"] > 0){
+                            $getUserData = $this->user_details($getUserData["result"]);
+                            return $this->success_response("Welcome! Login successfully!",$getUserData);
+                        }else{
+                            return $this->error_response("Sorry! Invalid login credential!");
+                        }
+                    }else{
+                        return $this->error_response("Sorry! For gmail login, email and social_id required!");
+                    }
+                }
+                // =============== gmail login section =============== //
+
+                // =============== fb or twitter or instagram login section =============== //
+                if( ($loginType == 3) || ($loginType == 4) || ($loginType == 5)){
+                    $socialId = $this->input_post("social_id");
+                    if( (strlen($socialId) > 0) ){
+                        $getUserData = $operation->get_data("users",'*',array("social_id"=>$socialId));
+                        if($getUserData["num_rows"] > 0){
+                            $getUserData = $this->user_details($getUserData["result"]);
+                            return $this->success_response("Welcome! Login successfully!",$getUserData);
+                        }else{
+                            return $this->error_response("Sorry! Invalid login credential!");
+                        }
+                    }else{
+                        return $this->error_response("Sorry! For gmail login, email and social_id required!");
+                    }
+                }
+                // =============== fb or twitter or instagram =============== //
+            }else{
+                return $this->error_response("Sorry! login_type required!");
+            }
+        }
+
+
+        public function registration(){
+            $operation = new Operation();
+            $mailer =  new Mailler();
+            $loginType = $this->input_post("login_type"); // 1=normal, 2=gmail, 3 = fb, 4=twitter, 5=instagram 6=metamask
+            $deviceType = $this->input_post("device_type"); // 1= web, 2= android, 3=iOS 
+            $deviceToken = $this->input_post("device_token"); 
+
+            if( (strlen($loginType) > 0) && (strlen($deviceType) > 0) && (strlen($deviceToken) > 0) ){
+
+                // =============== normal registration section =============== //
+                if($loginType == 1){
+                    $name = $this->input_post("name");
+                    $dialingCode = $this->input_post("dialing_code");
+                    $phoneNo = $this->input_post("phone_no");
+                    $email = $this->input_post("email");
+                    $password = $this->input_post("password");
+                    if( (strlen($name) > 0) && (strlen($dialingCode) > 0) && (strlen($phoneNo) > 0) && (strlen($email) > 0) && (strlen($password) > 0) ){
+                        $checkEmail = $operation->get_data("users",'id,email,status,email_verify',array("email"=>$email));
+                        if($checkEmail["num_rows"] == 0){
+                            $code = 'UAE0000000';
+                            $lastCode = $operation->get_data("users",'id',array(),"id","DESC","1","0");
+                            if($lastCode["num_rows"]==1){
+                                $lastId = $lastCode["result"][0]->id;
+                                $currId = (int)$lastId+1;
+                                $WalletId = $code.$currId;
+                            }else{
+                                $WalletId = $code."1";
+                            }
+
+                            $dataToInsert = array(
+                                "name"=>$name,
+                                "email"=>$email,
+                                "password"=>md5($password),
+                                "wallet_id"=>$WalletId,
+                                "dialing_code"=>$dialingCode,
+                                "phone_no"=>$phoneNo,
+                                "login_type"=>1,
+                                "status"=>1,
+                                "email_verify"=>0,
+                                "phone_verify"=>0
+                            );
+
+                            $operation->insert_data("users",$dataToInsert);
+
+                            $otp=rand("1000","9999");
+                            $variables = array();
+                            $variables['OTP'] = $otp;
+                            $emailTemplate = $operation->get_data("email_template","*",array("id"=>3));
+                            $template=$emailTemplate["result"][0]->template;
+                            foreach($variables as $key => $value){
+                                $template = str_replace('['.$key.']', $value, $template);
+                            }
+                            $subject = "otp Verification.";
+                            $sentMail=$mailer->sent_email($email,$name,$subject,$template);
+
+                            $otpProcessId = rand("1000000000","9999990000");
+                            $verificationInsert=array(
+                                "otp_process_id"=>$otpProcessId,
+                                "email"=>$email,
+                                "otp"=>$otp,
+                                "encrypted_id"=>$operation->encrypt_decrypt("encrypt",$WalletId),
+                                "type"=>1
+                            );
+
+                            $otpVerification=$operation->insert_data("email_verification",$verificationInsert);
+                            return $this->success_response("Welcome! Verification Email sent to your email, please check and verify",array("otp_process_id"=>(string)$otpProcessId));
+
+                        }else{
+                            return $this->error_response("Sorry! this email is already registered. Please login!");
+                        }
+
+                    }else{
+                        return $this->error_response("Sorry! name, dialing_code, phone_no, email, password required!");
+                    }
+
+                }
+                // =============== normal registration section =============== //
+
+                // =============== gmail registration section =============== //
+                if($loginType == 2){
+                    $email = $this->input_post("email");
+                    $socialLoginId = $this->input_post("social_login_id");
+                    if( (strlen($email) > 0) && (strlen($socialLoginId) > 0) ){
+                        $checkEmail = $operation->get_data("users",'id,email,status,email_verify,social_id',array("social_id"=>$socialLoginId));
+                        if($checkEmail["num_rows"] == 0){
+                            $code = 'UAE0000000';
+                            $lastCode = $operation->get_data("users",'id',array(),"id","DESC","1","0");
+                            if($lastCode["num_rows"]==1){
+                                $lastId = $lastCode["result"][0]->id;
+                                $currId = (int)$lastId+1;
+                                $WalletId = $code.$currId;
+                            }else{
+                                $WalletId = $code."1";
+                            }
+
+                            $dataToInsert = array(
+                                "email"=>$email,
+                                "wallet_id"=>$WalletId,
+                                "login_type"=>2,
+                                "status"=>1,
+                                "email_verify"=>1,
+                                "phone_verify"=>0,
+                                "social_id"=>$socialLoginId
+                            );
+
+                            $operation->insert_data("users",$dataToInsert);
+
+                            $getUserData = $operation->get_data("users",'*',array("social_id"=>$socialLoginId));
+                            $getUserData = $this->user_details($getUserData["result"]);
+                            return $this->success_response("Welcome! Login successfully!",$getUserData);
+                        }else{
+                            return $this->error_response("Sorry! this account is already registered. Please login!");
+                        }
+                    }else{
+                        return $this->error_response("Sorry! email, social_login_id required!");
+                    }
+                }
+                // =============== gmail registration section =============== //
+
+                // =============== fb or twitter or instagram registration section =============== //
+                if( ($loginType == 3) || ($loginType == 4) || ($loginType == 5)){
+                    $socialLoginId = $this->input_post("social_login_id");
+                    if( (strlen($socialLoginId) > 0) ){
+                        $checkEmail = $operation->get_data("users",'id,email,status,email_verify,social_id',array("social_id"=>$socialLoginId));
+                        if($checkEmail["num_rows"] == 0){
+                            $code = 'UAE0000000';
+                            $lastCode = $operation->get_data("users",'id',array(),"id","DESC","1","0");
+                            if($lastCode["num_rows"]==1){
+                                $lastId = $lastCode["result"][0]->id;
+                                $currId = (int)$lastId+1;
+                                $WalletId = $code.$currId;
+                            }else{
+                                $WalletId = $code."1";
+                            }
+
+                            $dataToInsert = array(
+                                "wallet_id"=>$WalletId,
+                                "login_type"=>$loginType,
+                                "status"=>1,
+                                "email_verify"=>0,
+                                "phone_verify"=>0,
+                                "social_id"=>$socialLoginId
+                            );
+
+                            $operation->insert_data("users",$dataToInsert);
+
+                            $getUserData = $operation->get_data("users",'*',array("social_id"=>$socialLoginId));
+                            $getUserData = $this->user_details($getUserData["result"]);
+                            return $this->success_response("Welcome! Login successfully!",$getUserData);
+                        }else{
+                            return $this->error_response("Sorry! this account is already registered. Please login!");
+                        }
+                    }else{
+                        return $this->error_response("Sorry! social_login_id required!");
+                    }
+                }
+                // =============== fb or twitter or instagram registration section =============== //
+
+            }else{
+                return $this->error_response("Sorry! login_type, device_type, device_token required!");
+            }
+        }
+
+        public function email_verification(){
+            $operation = new Operation();
+            $mailer =  new Mailler();
+            $otpProcessId = $this->input_post("otp_process_id");
+            $otp = $this->input_post("otp");
+            if( (strlen($otpProcessId) >0 ) && (strlen($otp) >0 )){
+                $checkOTPData = $operation->get_data("email_verification",'*',array("otp_process_id"=>$otpProcessId));
+                if($checkOTPData["num_rows"] > 0 ){
+                    if($otp == $checkOTPData["result"][0]->otp){
+                        $updateProfile = $operation->update_data("users",array('email'=>$checkOTPData["result"][0]->email),array("email_verify"=>1));
+                        $operation->update_data("email_verification",array('id'=>$checkOTPData["result"][0]->id),array("status"=>0));
+                        if($updateProfile){
+                            return $this->success_response("Welcome! Email is verified. Please login");
+                        }else{
+                            return $this->error_response("Sorry! Internal Error !");
+                        }
+                    }else{
+                        return $this->error_response("Sorry! Invalid OTP!");
+                    }
+                }else{
+                    return $this->error_response("Sorry! Invalid Request!");
+                }
+            }else{
+                return $this->error_response("Sorry! otp_process_id and otp required!");
+            }
+        }
+
+        public function resend_otp(){
+            $operation = new Operation();
+            $mailer =  new Mailler();
+            $otpProcessId = $this->input_post("otp_process_id");
+
+            if( (strlen($otpProcessId) >0 ) ){
+                $checkOTPData = $operation->get_data("email_verification",'*',array("otp_process_id"=>$otpProcessId));
+                if($checkOTPData["num_rows"] > 0){
+                    
+                    $otp=rand("1000","9999");
+                    $variables = array();
+                    $variables['OTP'] = $otp;
+                    $emailTemplate = $operation->get_data("email_template","*",array("id"=>3));
+                    $template=$emailTemplate["result"][0]->template;
+                    foreach($variables as $key => $value){
+                        $template = str_replace('['.$key.']', $value, $template);
+                    }
+                    $subject = "otp Verification.";
+                    $email = $checkOTPData["result"][0]->email;
+                    $name = "User";
+                    $sentMail=$mailer->sent_email($email,$name,$subject,$template);
+
+                    $otpProcessId = rand("1000000000","9999990000");
+                    $verificationInsert=array(
+                        "otp"=>$otp
+                    );
+
+                    $operation->update_data("email_verification",array("id"=>$checkOTPData["result"][0]->id),$verificationInsert);
+
+                    return $this->success_response("OTP sended to your email. Please check");
+
+                }else{
+                    return $this->error_response("Sorry! Invalid Request!");
+                }
+            }else{
+                return $this->error_response("Sorry! otp_process_id and otp required!");
+            }
+
+
+            
+        }
+
+
+
+        protected function user_details($getUserData){
+            $userData = array();
+            foreach($getUserData as $getUserDataRow){
+                $userData = array(
+                    "account_type" => (string)1,
+                    "id" => $getUserDataRow->id,
+                    "name" => $getUserDataRow->name,
+                    "email" => $getUserDataRow->email,
+                    "phone_no" => $getUserDataRow->phone_no,
+                    "address" => $getUserDataRow->address,
+                    "wallet_id" => $getUserDataRow->wallet_id,
+                    "wallet_point" => $getUserDataRow->wallet_point,
+                    "crypto_wallet" => $getUserDataRow->crypto_wallet,
+                    "login_type" => $getUserDataRow->login_type,
+                    "device_type" => $getUserDataRow->device_type,
+                    "social_id" => $getUserDataRow->social_id,
+                    "referral_id" => $getUserDataRow->referral_id,
+                    "phone_verify" => $getUserDataRow->phone_verify,
+                    "email_verify" => $getUserDataRow->email_verify,
+                    "image" => $getUserDataRow->image,
+                    "security_question_answered" => $getUserDataRow->security_question
+                );
+            }
+            return $userData;
+        }
+        
+    }

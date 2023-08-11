@@ -1,0 +1,59 @@
+<?php
+    namespace App\Controllers\Api\v1;
+    use App\Controllers\ApiController;
+    use App\Models\Operation;
+    use App\Models\Mailler;
+
+
+    class Walknearn extends ApiController{
+
+        public function update_user_health_details(){
+            $operation = new Operation();
+            $userId = $this->input_post("user_id");
+            $gender = $this->input_post("gender");
+            $height = $this->input_post("height");
+            $width = $this->input_post("width");
+            if( (strlen($userId) >0 ) && (strlen($gender) >0 ) && (strlen($height) >0 ) && (strlen($width) >0 )){
+                $updateUser = $operation->update_data("users",array("id"=>$userId),array("gender"=>$gender,"height"=>$height,"width"=>$width));
+                if($updateUser){
+                    return $this->success_response("User health details updated!");
+                }else{
+                    return $this->error_response("Sorry! Try again!");
+                }
+            }else{
+                return $this->error_response("Sorry! user_id, gender, height and width required!");
+            }
+        }
+
+
+        public function start_walking(){
+            $operation = new Operation();
+            $userId = $this->input_post("user_id");
+            $lat = $this->input_post("lat");
+            $long = $this->input_post("long");
+            $stepCount = $this->input_post("step_count");
+            if( (strlen($userId) >0 ) && (strlen($lat) >0 ) && (strlen($long) >0 ) ){
+                if( (strlen($stepCount) == 0) ){
+                    $stepCount = 0;
+                }
+                $dataToInsert = array(
+                    "user_id"=>$userId,
+                    "start_lat"=>$lat,
+                    "start_long"=>$long,
+                    "step_count"=>$stepCount,
+                    "started_on"=>date("Y-m-d H:m:s")
+                );
+                $added = $operation->insert_data("walkearn_user_history",$dataToInsert);
+                if($added){
+                    return $this->success_response("Step Count added");
+                }else{
+                    return $this->error_response("Sorry! Please try again!");
+                }
+            }else{
+                return $this->error_response("Sorry! user_id, lat and long required!");
+            }
+
+        }
+    }
+
+?>

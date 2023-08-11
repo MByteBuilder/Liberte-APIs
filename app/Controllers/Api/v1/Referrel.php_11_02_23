@@ -1,0 +1,63 @@
+<?php
+    namespace App\Controllers\Api\v1;
+    use App\Controllers\ApiController;
+    use App\Models\Operation;
+    use App\Models\Mailler;
+
+
+    class Referrel extends ApiController{
+
+        public function list(){
+            $operation = new Operation();
+            //$id = $this->input_get("id");
+            $session = \Config\Services::session();
+            $user_id = $session->get("lbt_admin_id");
+            $user_type = $session->get("lbt_admin_type");
+            // $user_id = $this->input_get("id");
+            // $user_type = $this->input_get("type");
+            $is_used = $this->input_get("is_used");
+           
+
+            $searchCondition = array();
+            if($user_type == 1){
+                $searchCondition = array_merge($searchCondition,array());
+            }
+            if($user_type == 2){
+                $searchCondition = array_merge($searchCondition,array("member_id"=>$user_id));
+            }
+            if(strlen($is_used) > 0){
+                $searchCondition = array_merge($searchCondition,array("is_used"=>$is_used));
+            }
+            
+            $data  = $operation->get_data("team_referral_code",'*',$searchCondition);
+            // echo "<pre>";
+            // print_r($data);
+            // die();
+            if($data["num_rows"] > 0){
+                $returnArr = array();
+                $dataRowCount = 0;
+                foreach($data["result"] as $dataRow){
+                    $returnArr[$dataRowCount]["referrel_id"] = $dataRow->id;
+                    $returnArr[$dataRowCount]["team_member_id"] = $dataRow->member_id;
+                    if(strlen($dataRow->id) > 0){
+                        $country_data  = $operation->get_data("team_member",'*',array('id'=>$dataRow->member_id));
+                        //$returnArr[$dataRowCount]["team_member_id"] = $country_data['result'][0]->id;
+                        $returnArr[$dataRowCount]["team_member_name"] = $country_data['result'][0]->name;
+                        $returnArr[$dataRowCount]["team_member_email"] = $country_data['result'][0]->email;
+                        $returnArr[$dataRowCount]["team_member_phone"] = $country_data['result'][0]->phone_no;
+                    }
+                    
+                    $returnArr[$dataRowCount]["code"] = $dataRow->code;
+                    $returnArr[$dataRowCount]["is_used"] = $dataRow->is_used;
+                    //$returnArr[$dataRowCount]["phone_no"] = $dataRow->phone_no;
+                    $returnArr[$dataRowCount]["status"] = $dataRow->status;
+                    $dataRowCount++;
+                }
+                return $this->success_response("Data list found",$returnArr);
+            }else{
+                return $this->error_response("Sorry! No activity found!");
+            }
+           
+        }
+    }
+?>
