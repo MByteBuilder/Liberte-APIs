@@ -179,7 +179,7 @@
                 $lastRow = 0;
             }
             if(strlen($limit) == 0){
-                $limit = 10;
+                $limit = 20;
             }
             if(strlen($userId) > 0){
                 $userDetails = $operation->get_data("users",'id,wallet_point,referral_point,chain_code',array("id"=>$userId),"id","DESC","0","1");
@@ -190,15 +190,15 @@
                     $getSponsored = $operation->get_data("user_referral",'id,referred_by',array("referred_by"=>$userId),"id","DESC");
                     $sponsoredCount = $getSponsored["num_rows"];
 
-                    $getNetwork = $operation->get_data("users",'id,chain_code',array("id !="=>$userId),"id","DESC","","",array("chain_code"=>$chainCode."-" ));
+                    $getNetwork = $operation->get_data("users",'id,chain_code',array("id !="=>$userId),"id","DESC","","",array("chain_code"=>$chainCode ));
                     $networkCount = $getNetwork["num_rows"];
 
                     $commonDataArr = array(
                         "wallet_point"=>(string)number_format((float)$userDetails["result"][0]->wallet_point, 1, '.', ''),
                         "referral_point"=>(string)number_format((float)$userDetails["result"][0]->referral_point, 1, '.', ''),
                         "sponsoredCount"=>(string)$sponsoredCount,
-                        "networkCount"=>(string)($networkCount),
-                        "totalNetworkCount"=>(string)($sponsoredCount+$networkCount)
+                        "networkCount"=>(string)($networkCount-$sponsoredCount),
+                        "totalNetworkCount"=>(string)($sponsoredCount+($networkCount-$sponsoredCount))
                     );
                     $sponsoredListData = $sponsoredListReturn = array();
                     $sponsoredListPagination = array();
@@ -221,7 +221,7 @@
                             $currChainCode = $sponsoredListRow->chain_code;
                             $getCurrNetwork = $operation->get_data("users",'id,chain_code',array("id !="=>$userId),"id","DESC","","",array("chain_code"=>$currChainCode));
                             $sponsoredListData[$sponsoredListRowCount]["network_count"] = (string)$getCurrNetwork["num_rows"];;
-                            $sponsoredListData[$sponsoredListRowCount]["reward_earned"] = "3000";
+                            $sponsoredListData[$sponsoredListRowCount]["reward_earned"] = "2500";
                             $sponsoredListRowCount++;
                         }
                         $lastRow = $lastRow+$getSponsoredList["num_rows"];
@@ -242,8 +242,7 @@
                     }
                     $returnArr = array(
                         "common_data" => $commonDataArr,
-                        "sponsored_list"=>$sponsoredListReturn,
-                        "network_list"=>$this->users_network_calculation($userId,$lastRow,$limit)
+                        "sponsored_list"=>$sponsoredListReturn
                     );
                     return $this->success_response("Data list found",$returnArr);
                 }else{
@@ -297,12 +296,12 @@
 
 
         protected function reward_calculation($level){
-            $reward = 3000;
+            $reward = 2500;
             $rewardPercentage = 100; 
             if($level == 1){
                 $prevRewardPercentage = 100;
                 $rewardPercentage = 100;
-                $rewardPoint = "3000";
+                $rewardPoint = "2500";
             }else if($level > 1){
                 switch ($level) {
                     case 2:
@@ -369,53 +368,6 @@
             // $usersPercentage = $this->cal_percentage($rewardPercentage,$level,$prevRewardPercentage);
             return (string)$rewardPoint;
 
-        }
-
-        public function users_network_calculation($userId,$lastRow,$limit){
-            $operation = new Operation();
-            $this->db = \Config\Database::connect();
-            $networkData = array();
-            $getUsers = $operation->get_data("users",'id,chain_code,status',array('id'=>$userId));
-            if($getUsers["num_rows"] > 0){
-                $builder = $this->db->table("users");
-                $builder->like('chain_code', $getUsers["result"][0]->chain_code."-", 'after'); 
-                $builder->limit($limit, $lastRow);
-                $query = $builder->get();
-                $getUsersNetwork = $query->getResult();
-                if(count($getUsersNetwork)){
-                    $getUsersNetworkRowCount = 0;
-                    foreach($getUsersNetwork as $getUsersNetworkRow){
-                        $networkData[$getUsersNetworkRowCount]["user_id"] = $getUsersNetworkRow->id;
-                        $networkData[$getUsersNetworkRowCount]["name"] = $getUsersNetworkRow->name;
-                        $networkData[$getUsersNetworkRowCount]["image"] = $getUsersNetworkRow->image;
-                        $joinedOn = date("Y-m-d",strtotime($getUsersNetworkRow->added_on));
-                        $joinDays = date_diff(date_create(date("Y-m-d")),date_create($joinedOn));
-                        $networkData[$getUsersNetworkRowCount]["days_joined"] = $joinDays->format('%d');
-                        $networkData[$getUsersNetworkRowCount]["network_count"] = $getUsersNetworkRow->total_network;
-                        $networkData[$getUsersNetworkRowCount]["reward_earned"] = "";
-                        $getUsersNetworkRowCount++;
-                    }
-                }
-                $lastRow = $lastRow+$limit;
-                $builder = $this->db->table("users");
-                $builder->like('chain_code', $getUsers["result"][0]->chain_code."-", 'after'); 
-                $builder->limit(1, $lastRow);
-                $query = $builder->get();
-                $getUsersNetworkPagi = $query->getResult();
-                if(count($getUsersNetworkPagi)){
-                    $load_more = 1;
-                }else{
-                    $load_more = 0;
-                }
-
-                $sponsoredListPagination["last_row"] = (string)count($getUsersNetwork);
-                $sponsoredListPagination["load_more"] = (string)$load_more;
-                $networkListReturn["data"] = $networkData;
-                $networkListReturn["pagination"] = $sponsoredListPagination;
-                return $networkListReturn;
-            }else{
-                return $networkData;
-            }
         }
     }
 ?>

@@ -47,10 +47,8 @@ $routes->group('api', function ($routes) {
 		$routes->post('update-user-notification-seen', 'Api\v1\Users::seen_push_notification');
 		$routes->get('user-notification-list', 'Api\v1\Users::push_notification_list');
 		$routes->post('check-email-phone', 'Api\v1\Users::check_email_phone');
-		$routes->post('check-email-phone-referral', 'Api\v1\Users::checking_one');
 		$routes->post('login', 'Api\v1\Users::login');
 		$routes->post('logout', 'Api\v1\Users::logout');
-		$routes->post('account-inactive', 'Api\v1\Users::account_inactive');
 		$routes->post('registration', 'Api\v1\Users::registration');
 		$routes->post('email-verification', 'Api\v1\Users::email_verification');
 		$routes->post('resend-otp', 'Api\v1\Users::resend_otp');
@@ -158,10 +156,6 @@ $routes->group('api', function ($routes) {
 
 		$routes->get('add-daily-checkin-reminder', 'Api\v1\Cron::add_daily_checkin_reminder');
 		$routes->get('send-daily-checkin-reminder', 'Api\v1\Cron::send_daily_checkin_reminder');
-
-
-		$routes->post('update-premium', 'Api\v1\Users::update_premium');
-		$routes->get('users-premium-status', 'Api\v1\Users::users_premium_status');
 	});
 	
 });

@@ -179,7 +179,7 @@
                 $lastRow = 0;
             }
             if(strlen($limit) == 0){
-                $limit = 10;
+                $limit = 20;
             }
             if(strlen($userId) > 0){
                 $userDetails = $operation->get_data("users",'id,wallet_point,referral_point,chain_code',array("id"=>$userId),"id","DESC","0","1");
@@ -243,7 +243,7 @@
                     $returnArr = array(
                         "common_data" => $commonDataArr,
                         "sponsored_list"=>$sponsoredListReturn,
-                        "network_list"=>$this->users_network_calculation($userId,$lastRow,$limit)
+                        "network_list"=>$this->users_network_calculation($userId)
                     );
                     return $this->success_response("Data list found",$returnArr);
                 }else{
@@ -371,7 +371,7 @@
 
         }
 
-        public function users_network_calculation($userId,$lastRow,$limit){
+        public function users_network_calculation($userId){
             $operation = new Operation();
             $this->db = \Config\Database::connect();
             $networkData = array();
@@ -379,7 +379,6 @@
             if($getUsers["num_rows"] > 0){
                 $builder = $this->db->table("users");
                 $builder->like('chain_code', $getUsers["result"][0]->chain_code."-", 'after'); 
-                $builder->limit($limit, $lastRow);
                 $query = $builder->get();
                 $getUsersNetwork = $query->getResult();
                 if(count($getUsersNetwork)){
@@ -396,20 +395,8 @@
                         $getUsersNetworkRowCount++;
                     }
                 }
-                $lastRow = $lastRow+$limit;
-                $builder = $this->db->table("users");
-                $builder->like('chain_code', $getUsers["result"][0]->chain_code."-", 'after'); 
-                $builder->limit(1, $lastRow);
-                $query = $builder->get();
-                $getUsersNetworkPagi = $query->getResult();
-                if(count($getUsersNetworkPagi)){
-                    $load_more = 1;
-                }else{
-                    $load_more = 0;
-                }
-
                 $sponsoredListPagination["last_row"] = (string)count($getUsersNetwork);
-                $sponsoredListPagination["load_more"] = (string)$load_more;
+                $sponsoredListPagination["load_more"] = (string)0;
                 $networkListReturn["data"] = $networkData;
                 $networkListReturn["pagination"] = $sponsoredListPagination;
                 return $networkListReturn;

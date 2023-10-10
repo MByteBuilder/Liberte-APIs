@@ -1376,7 +1376,7 @@
                     "width" => $getUserDataRow->width,
                     "member_since"=> date("Y",strtotime($getUserDataRow->added_on)),
                     "kyc_verify"=>$getUserDataRow->kyc_verify,
-                    "walk_reward_point"=>"0.01",
+                    "walk_reward_point"=>"0.00001",
                     "timezone"=>$getUserDataRow->timezone,
                     "is_logged_in"=>$getUserDataRow->is_logged_in
                 );
@@ -2098,7 +2098,6 @@
             $operation = new Operation();
             $addedTime = 30;
             $checkData = $operation->get_data("walkearn_user_time_history",'*',array("user_id"=>$userId,"date"=>$todayDate),"id","DESC");
-            // echo "<pre>";print_r($checkData);die();
             if($checkData["num_rows"] == 0){
                 $dataToInsert = array(
                     "user_id"=>$userId,
@@ -2178,131 +2177,88 @@
             $caloriesValue = $this->input_post("calories_value");
             $timeValues = 30;//$this->input_post("time_values");
             $dateRange = $this->input_get("date_range");
-
-            $dataJson =  $this->input_post("data");
-            $dataArr = json_decode($dataJson);
-            
-
             if(strlen($dateRange) == 0){
                 $dateRange = 1;
             }
             $date = date("Y-m-d",time());
 
-            if(count($dataArr) > 0){
-                foreach($dataArr as $dataArrRow){
-                    $totalCoins = $dataArrRow->total_coins;
-                    $stepCount = $dataArrRow->step_count;
-                    $datetime = $dataArrRow->datetime;
-                    $distanceValue = $dataArrRow->distance_value;
-                    $caloriesValue = $dataArrRow->calories_value;
+            if( (strlen($userId)>0) && (strlen($totalCoins)>0) && (strlen($stepCount)>0) && (strlen($datetime)>0) && (strlen($distanceValue)>0) && (strlen($caloriesValue)>0) && (strlen($timeValues)>0) ){
+                $getUserDailyData = $operation->get_data("walkearn_user_history",'id,user_id,date',array("user_id"=>$userId,"date"=>date("Y-m-d",strtotime($datetime)),"hour"=> date("H",strtotime($datetime)) ));
+                
+                $this->update_user_walk_earn_time($userId,date("Y-m-d",strtotime($datetime)),$totalCoins,$stepCount);
+                
+                if($getUserDailyData["num_rows"] > 0){
+                    $this->db = \Config\Database::connect();
+                    $builder = $this->db->table("users");
+                    $walletPoint = 'wallet_point+'.$totalCoins;
+                    $builder->set('wallet_point', $walletPoint, FALSE);
+                    $builder->where(array("id"=>$userId));
+                    $builder->update();
+                    $transactionData = array(
+                        "user_id"=>$userId,
+                        "type"=>1,
+                        "points"=>$totalCoins,
+                        "details"=>"Walk and earn Reward"
+                    );
+                    $operation->insert_data("user_wallet_transaction",$transactionData);
 
-                    if( (strlen($userId)>0) && (strlen($totalCoins)>0) && (strlen($stepCount)>0) && (strlen($datetime)>0) && (strlen($distanceValue)>0) && (strlen($caloriesValue)>0) && (strlen($timeValues)>0) ){
-                        $getUserDailyData = $operation->get_data("walkearn_user_history",'id,user_id,date',array("user_id"=>$userId,"date"=>date("Y-m-d",strtotime($datetime)),"hour"=> date("H",strtotime($datetime)) ));
-                        
-                        $this->update_user_walk_earn_time($userId,date("Y-m-d",strtotime($datetime)),$totalCoins,$stepCount);
-                        // echo "<pre>";print_r($getUserDailyData);die();
-                        if($getUserDailyData["num_rows"] > 0){
-                            $this->db = \Config\Database::connect();
-                            $builder = $this->db->table("users");
-                            $walletPoint = 'wallet_point+'.$totalCoins;
-                            $builder->set('wallet_point', $walletPoint, FALSE);
-                            $builder->where(array("id"=>$userId));
-                            $builder->update();
-                            $checkTodaysWalkEarnData =  $operation->get_data("user_wallet_transaction",'id,user_id,added_on',array("user_id"=>$userId ),"added_on","DESC","1","0",array("added_on"=>date("Y-m-d",strtotime($datetime)) ));
-        
-                            if($checkTodaysWalkEarnData["num_rows"] > 0){
-                                $this->db = \Config\Database::connect();
-                                $builder = $this->db->table("user_wallet_transaction");
-                                $totalTime = 'points+'.$totalCoins;
-                                $builder->set('points', $totalTime,FALSE);
-                                $builder->set('added_on', date("Y-m-d H:s:i",strtotime($datetime)));
-                                $builder->where(array("user_id"=>$userId));
-                                $builder->where(array("id"=>$checkTodaysWalkEarnData["result"][0]->id));
-                                $builder->update();
-                            }else{
-                                $transactionData = array(
-                                    "user_id"=>$userId,
-                                    "type"=>1,
-                                    "points"=>$totalCoins,
-                                    "details"=>"Walk and earn Reward"
-                                );
-                                $operation->insert_data("user_wallet_transaction",$transactionData);
-                            }
-        
-                            
-        
-        
-        
-                            $this->db = \Config\Database::connect();
-                            $builder = $this->db->table("walkearn_user_history");
-                            $totalCoins = 'total_coins+'.$totalCoins;
-                            $stepCount = 'step_count+'.$stepCount;
-                            $distanceValue = 'distance_value+'.$distanceValue;
-                            $caloriesValue = 'calories_value+'.$caloriesValue;
-                            $timeValues = 'time_values+'.$timeValues;
-        
-                            $datetime = date("Y-m-d H:i:s",strtotime($datetime));
-                            $dateHour = date("H",strtotime($datetime));
-                            
-                            $builder->set('total_coins', $totalCoins,FALSE);
-                            $builder->set('step_count', $stepCount,FALSE);
-                            $builder->set('distance_value', $distanceValue,FALSE);
-                            $builder->set('calories_value', $caloriesValue,FALSE);
-                            $builder->set('time_values', $timeValues,FALSE);
-                            $builder->set('datetime', $datetime);
-                            
-                            $builder->where(array("user_id"=>$userId));
-                            $builder->where(array("date"=>date("Y-m-d",strtotime($datetime)),"hour"=>$dateHour));
-                            $builder->update();
-                        }else{
-                            $dataToInsert = array(
-                                "user_id"=>$userId,
-                                "total_coins"=>$totalCoins,
-                                "step_count"=>$stepCount,
-                                "datetime"=>date("Y-m-d H:i:s",strtotime($datetime)),
-                                "date"=>date("Y-m-d",strtotime($datetime)),
-                                "hour"=> date("H",strtotime($datetime)),
-                                "day"=> date("d",strtotime($datetime)),
-                                "distance_value"=>$distanceValue,
-                                "calories_value"=>$caloriesValue,
-                                "time_values"=>$timeValues
-                            );
-                            $added = $operation->insert_data("walkearn_user_history",$dataToInsert);
-        
-                            $this->db = \Config\Database::connect();
-                            $builder = $this->db->table("users");
-                            $walletPoint = 'wallet_point+'.$totalCoins;
-                            $builder->set('wallet_point', $walletPoint, FALSE);
-                            $builder->where(array("id"=>$userId));
-                            $builder->update();
-        
-                            $checkTodaysWalkEarnData =  $operation->get_data("user_wallet_transaction",'id,user_id,added_on',array("user_id"=>$userId ),"added_on","DESC","1","0",array("added_on"=>date("Y-m-d",strtotime($datetime)) ));
-                            if($checkTodaysWalkEarnData["num_rows"] > 0){
-                                $this->db = \Config\Database::connect();
-                                $builder = $this->db->table("user_wallet_transaction");
-                                $totalTime = 'points+'.$totalCoins;
-                                $builder->set('points', $totalTime,FALSE);
-                                $builder->set('added_on', date("Y-m-d H:s:i",strtotime($datetime)));
-                                $builder->where(array("user_id"=>$userId));
-                                $builder->where(array("id"=>$checkTodaysWalkEarnData["result"][0]->id));
-                                $builder->update();
-                            }else{
-                                $transactionData = array(
-                                    "user_id"=>$userId,
-                                    "type"=>1,
-                                    "points"=>$totalCoins,
-                                    "details"=>"Walk and earn Reward"
-                                );
-                                $operation->insert_data("user_wallet_transaction",$transactionData);
-                            }
-                        }
-        
-                        // $getUserDailyData = $operation->get_data("walkearn_user_history",'*',array("user_id"=>$userId,"date"=>date("Y-m-d",strtotime($datetime))));
-                        // $returnArr = $getUserDailyData["result"][0];
-                    }else{
-                        return $this->error_response("Sorry! missing params!");
-                    }
+
+
+                    $this->db = \Config\Database::connect();
+                    $builder = $this->db->table("walkearn_user_history");
+                    $totalCoins = 'total_coins+'.$totalCoins;
+                    $stepCount = 'step_count+'.$stepCount;
+                    $distanceValue = 'distance_value+'.$distanceValue;
+                    $caloriesValue = 'calories_value+'.$caloriesValue;
+                    $timeValues = 'time_values+'.$timeValues;
+
+                    $datetime = date("Y-m-d H:i:s",strtotime($datetime));
+                    $dateHour = date("H",strtotime($datetime));
+                    
+                    $builder->set('total_coins', $totalCoins,FALSE);
+                    $builder->set('step_count', $stepCount,FALSE);
+                    $builder->set('distance_value', $distanceValue,FALSE);
+                    $builder->set('calories_value', $caloriesValue,FALSE);
+                    $builder->set('time_values', $timeValues,FALSE);
+                    $builder->set('datetime', $datetime);
+                    
+                    $builder->where(array("user_id"=>$userId));
+                    $builder->where(array("date"=>date("Y-m-d",strtotime($datetime)),"hour"=>$dateHour));
+                    $builder->update();
+                }else{
+                    $dataToInsert = array(
+                        "user_id"=>$userId,
+                        "total_coins"=>$totalCoins,
+                        "step_count"=>$stepCount,
+                        "datetime"=>date("Y-m-d H:i:s",strtotime($datetime)),
+                        "date"=>date("Y-m-d",strtotime($datetime)),
+                        "hour"=> date("H",strtotime($datetime)),
+                        "day"=> date("d",strtotime($datetime)),
+                        "distance_value"=>$distanceValue,
+                        "calories_value"=>$caloriesValue,
+                        "time_values"=>$timeValues
+                    );
+                    $added = $operation->insert_data("walkearn_user_history",$dataToInsert);
+
+                    $this->db = \Config\Database::connect();
+                    $builder = $this->db->table("users");
+                    $walletPoint = 'wallet_point+'.$totalCoins;
+                    $builder->set('wallet_point', $walletPoint, FALSE);
+                    $builder->where(array("id"=>$userId));
+                    $builder->update();
+                    $transactionData = array(
+                        "user_id"=>$userId,
+                        "type"=>1,
+                        "points"=>$totalCoins,
+                        "details"=>"Walk and earn Reward"
+                    );
+                    $operation->insert_data("user_wallet_transaction",$transactionData);
                 }
+
+                // $getUserDailyData = $operation->get_data("walkearn_user_history",'*',array("user_id"=>$userId,"date"=>date("Y-m-d",strtotime($datetime))));
+                // $returnArr = $getUserDailyData["result"][0];
+                
+
                 if( (strlen($dateRange) == 0) || ($dateRange == 1) ){
                     $endDate = $startDate = date("Y-m-d",strtotime($date));
                 }else if($dateRange == "7"){
@@ -2498,6 +2454,10 @@
                     );
                     return $this->success_response("No walking history found!",$returnData);
                 }
+
+
+            }else{
+                return $this->error_response("Sorry! missing params!");
             }
         }
 
@@ -3449,7 +3409,7 @@
                         $operation->delete_data("user_daily_check_in",array("user_id"=>$user_id));
                         $operation->delete_data("user_health",array("user_id"=>$user_id));
                         $operation->delete_data("users",array("id"=>$user_id));
-                        $operation->update_data("user_referral",array('referred_by'=>$user_id),array("referred_by"=>1));
+                        $operation->update_data("user_referral",array('referred_by'=>$user_id),array("referred_by"=>1000));
                         return $this->success_response("Good bye! Your account deleted!");
                     }
                 }else{

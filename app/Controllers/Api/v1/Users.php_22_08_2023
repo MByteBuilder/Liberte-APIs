@@ -105,22 +105,15 @@
                         if( (strlen($phoneNo) > 0) && (strlen($password) > 0) ){
                             $getUserData = $operation->get_data("users",'*',array("phone_no"=>$phoneNo,"password"=>md5($password)));
                             if($getUserData["num_rows"] > 0){
-                                if($getUserData["result"][0]->status == 1){
-                                    if($getUserData["result"][0]->phone_verify == 1){
-                                        $operation->update_data("users",array('id'=>$getUserData["result"][0]->id),array("fcm_token"=>$fcm_token,'device_type'=>$deviceType,'is_logged_in'=>1));
-                                        $userId = $getUserData["result"][0]->id;
-                                        $getUserData = $this->user_details($getUserData["result"]);
-                                        $operation->send_notification($userId,1);
-                                        return $this->success_response("Welcome! Login successfully!",$getUserData);
-                                    }else{
-                                        return $this->error_response("Sorry! This phone no is not verified!");
-                                    }
-                                }else if($getUserData["result"][0]->status == 2){
-                                    return $this->error_response("Sorry! Account deactivated!");
+                                if($getUserData["result"][0]->phone_verify == 1){
+                                    $operation->update_data("users",array('id'=>$getUserData["result"][0]->id),array("fcm_token"=>$fcm_token,'device_type'=>$deviceType,'is_logged_in'=>1));
+                                    $userId = $getUserData["result"][0]->id;
+                                    $getUserData = $this->user_details($getUserData["result"]);
+                                    $operation->send_notification($userId,1);
+                                    return $this->success_response("Welcome! Login successfully!",$getUserData);
                                 }else{
-                                    return $this->error_response("Sorry! Account Blocked!");
+                                    return $this->error_response("Sorry! This phone no is not verified!");
                                 }
-                                
                                 
                                 // $checkEmailVerification = $getUserData["result"][0]->email_verify;
                                 // if($checkEmailVerification == 0){
@@ -139,21 +132,16 @@
                         if( (strlen($email) > 0) && (strlen($password) > 0) ){
                             $getUserData = $operation->get_data("users",'*',array("email"=>$email,"password"=>md5($password)));
                             if($getUserData["num_rows"] > 0){
-                                if($getUserData["result"][0]->status == 1){
-                                    if($getUserData["result"][0]->email_verify == 1){
-                                        $operation->update_data("users",array('id'=>$getUserData["result"][0]->id),array("fcm_token"=>$fcm_token,'device_type'=>$deviceType,'is_logged_in'=>1));
-                                        $userId = $getUserData["result"][0]->id;
-                                        $getUserData = $this->user_details($getUserData["result"]);
-                                        $operation->send_notification($userId,1);
-                                        return $this->success_response("Welcome! Login successfully!",$getUserData);
-                                    }else{
-                                        return $this->error_response("Sorry! This email is not verified!");
-                                    }
-                                }else if($getUserData["result"][0]->status == 2){
-                                    return $this->error_response("Sorry! Account deactivated!");
+                                if($getUserData["result"][0]->email_verify == 1){
+                                    $operation->update_data("users",array('id'=>$getUserData["result"][0]->id),array("fcm_token"=>$fcm_token,'device_type'=>$deviceType,'is_logged_in'=>1));
+                                    $userId = $getUserData["result"][0]->id;
+                                    $getUserData = $this->user_details($getUserData["result"]);
+                                    $operation->send_notification($userId,1);
+                                    return $this->success_response("Welcome! Login successfully!",$getUserData);
                                 }else{
-                                    return $this->error_response("Sorry! Account Blocked!");
+                                    return $this->error_response("Sorry! This email is not verified!");
                                 }
+                                
                             }else{
                                 return $this->error_response("Sorry! Invalid login credential!");
                             }
@@ -322,7 +310,27 @@
                                             return $this->error_response("Sorry! invalid referral code!");
                                         }
                                     }
-
+                                    
+        
+                                    // $otp=rand("1000","9999");
+                                    // $variables = array();
+                                    // $variables['OTP'] = $otp;
+                                    // $emailTemplate = $operation->get_data("email_template","*",array("id"=>3));
+                                    // $template=$emailTemplate["result"][0]->template;
+                                    // foreach($variables as $key => $value){
+                                    //     $template = str_replace('['.$key.']', $value, $template);
+                                    // }
+                                    // $subject = "otp Verification.";
+                                    // $sentMail=$mailer->sent_email($email,$name,$subject,$template);
+        
+                                    // $otpProcessId = rand("1000000000","9999990000");
+                                    // $verificationInsert=array(
+                                    //     "otp_process_id"=>$otpProcessId,
+                                    //     "email"=>$email,
+                                    //     "otp"=>$otp,
+                                    //     "encrypted_id"=>$operation->encrypt_decrypt("encrypt",$WalletId),
+                                    //     "type"=>1
+                                    // );
                                     $getUserData = $operation->get_data("users",'*',array("id"=>$userId));
                                     $getUserData = $this->user_details($getUserData["result"]);
                                     return $this->success_response("Welcome! Login successfully!",$getUserData);
@@ -337,168 +345,6 @@
                             }
                         }else{
                             return $this->error_response("Sorry! phone no should be number only!");
-                        }
-                    }else if((strlen($name) > 0) && (strlen($phoneNo) > 0) && (strlen($password) > 0) ){
-                        if(is_numeric($phoneNo)){
-                            $checkPhoneNo = $operation->get_data("users",'id,email,phone_no',array("phone_no"=>$phoneNo));
-                            if($checkPhoneNo["num_rows"] == 0){
-                                $code = 'LBT0000000';
-                                $lastCode = $operation->get_data("users",'id',array(),"id","DESC","1","0");
-                                if($lastCode["num_rows"]==1){
-                                    $lastId = $lastCode["result"][0]->id;
-                                    $currId = (int)$lastId+1;
-                                    $WalletId = $code.$currId;
-                                }else{
-                                    $WalletId = $code."1";
-                                }
-                                if(!empty($referral)){
-                                    $getRewardForNewUser = $operation->get_data("app_reward_settings",'*',array("id"=>15));
-                                }else{
-                                    $getRewardForNewUser = $operation->get_data("app_reward_settings",'*',array("id"=>5));
-                                }
-                                $joiningReward = $getRewardForNewUser["result"][0]->required_point;
-    
-                                
-                                
-                                if(strlen($referral) > 0 ){
-                                    $is_referred = 1;
-                                }else{
-                                    $is_referred = 0;
-                                }
-                                $chainCode = $this->generate_chain_net_code($referral);
-
-
-                                $dataToInsert = array(
-                                    "name"=>$name,
-                                    "email"=>"",
-                                    "password"=>md5($password),
-                                    "wallet_id"=>$WalletId,
-                                    "phone_no"=>$phoneNo,
-                                    "login_type"=>1,
-                                    "status"=>1,
-                                    "email_verify"=>$email_verify,
-                                    "phone_verify"=>$phone_verify,
-                                    "wallet_point"=>$joiningReward,
-                                    "referral_code"=>"LBT-".$this->generateRandomString(),
-                                    "fcm_token"=>$fcm_token,
-                                    "is_referred"=>$is_referred,
-                                    "chain_code"=>$chainCode
-                                );
-    
-                                $userId = $operation->insert_data("users",$dataToInsert);
-                                // echo "===".$joiningReward;
-                                $transactionData = array(
-                                    "user_id"=>$userId,
-                                    "type"=>1,
-                                    "points"=> number_format((float)$joiningReward, 7, '.', ''),
-                                    "details"=>"Joining Bonus"
-                                );
-                                // echo "<pre>";print_r($transactionData);
-                                $operation->insert_data("user_wallet_transaction",$transactionData);
-                                // echo "=== insert".$joiningReward;
-                                // die();
-                                
-                                if(!empty($referral)){
-                                    $checkReferral = $operation->get_data("users",'id,referral_code',array("referral_code"=>$referral));
-                                    if($checkReferral["num_rows"] > 0){
-                                        $getReferredUser = $checkReferral["result"][0]->id;
-                                        $dataForReferral = array(
-                                            "user_id"=>$userId,
-                                            "referred_by"=>$getReferredUser,
-                                        );
-                                        $operation->insert_data("user_referral",$dataForReferral);
-                                    }else{
-                                        return $this->error_response("Sorry! invalid referral code!");
-                                    }
-                                }
-
-                                $getUserData = $operation->get_data("users",'*',array("id"=>$userId));
-                                $getUserData = $this->user_details($getUserData["result"]);
-                                return $this->success_response("Welcome! Login successfully!",$getUserData);
-                            }else{
-                                return $this->error_response("Sorry! this phone no is already registered with another account!");
-                            }
-                        }else{
-                            return $this->error_response("Sorry! phone no should be number only!");
-                        }
-                    }else if((strlen($name) > 0) && (strlen($email) > 0) && (strlen($password) > 0)){
-                        $checkEmail = $operation->get_data("users",'id,email,status,email_verify,phone_no',array("email"=>$email));
-                        if($checkEmail["num_rows"] == 0){
-                            $code = 'LBT0000000';
-                            $lastCode = $operation->get_data("users",'id',array(),"id","DESC","1","0");
-                            if($lastCode["num_rows"]==1){
-                                $lastId = $lastCode["result"][0]->id;
-                                $currId = (int)$lastId+1;
-                                $WalletId = $code.$currId;
-                            }else{
-                                $WalletId = $code."1";
-                            }
-                            if(!empty($referral)){
-                                $getRewardForNewUser = $operation->get_data("app_reward_settings",'*',array("id"=>15));
-                            }else{
-                                $getRewardForNewUser = $operation->get_data("app_reward_settings",'*',array("id"=>5));
-                            }
-                            $joiningReward = $getRewardForNewUser["result"][0]->required_point;
-
-                            
-                            
-                            if(strlen($referral) > 0 ){
-                                $is_referred = 1;
-                            }else{
-                                $is_referred = 0;
-                            }
-                            $chainCode = $this->generate_chain_net_code($referral);
-
-
-                            $dataToInsert = array(
-                                "name"=>$name,
-                                "email"=>$email,
-                                "password"=>md5($password),
-                                "wallet_id"=>$WalletId,
-                                "phone_no"=>"",
-                                "login_type"=>1,
-                                "status"=>1,
-                                "email_verify"=>$email_verify,
-                                "phone_verify"=>$phone_verify,
-                                "wallet_point"=>$joiningReward,
-                                "referral_code"=>"LBT-".$this->generateRandomString(),
-                                "fcm_token"=>$fcm_token,
-                                "is_referred"=>$is_referred,
-                                "chain_code"=>$chainCode
-                            );
-
-                            $userId = $operation->insert_data("users",$dataToInsert);
-                            // echo "===".$joiningReward;
-                            $transactionData = array(
-                                "user_id"=>$userId,
-                                "type"=>1,
-                                "points"=> number_format((float)$joiningReward, 7, '.', ''),
-                                "details"=>"Joining Bonus"
-                            );
-                            // echo "<pre>";print_r($transactionData);
-                            $operation->insert_data("user_wallet_transaction",$transactionData);
-                            // echo "=== insert".$joiningReward;
-                            // die();
-                            
-                            if(!empty($referral)){
-                                $checkReferral = $operation->get_data("users",'id,referral_code',array("referral_code"=>$referral));
-                                if($checkReferral["num_rows"] > 0){
-                                    $getReferredUser = $checkReferral["result"][0]->id;
-                                    $dataForReferral = array(
-                                        "user_id"=>$userId,
-                                        "referred_by"=>$getReferredUser,
-                                    );
-                                    $operation->insert_data("user_referral",$dataForReferral);
-                                }else{
-                                    return $this->error_response("Sorry! invalid referral code!");
-                                }
-                            }
-
-                            $getUserData = $operation->get_data("users",'*',array("id"=>$userId));
-                            $getUserData = $this->user_details($getUserData["result"]);
-                            return $this->success_response("Welcome! Login successfully!",$getUserData);
-                        }else{
-                            return $this->error_response("Sorry! this email is already registered. Please login!");
                         }
                     }else{
                         return $this->error_response("Sorry! name, phone no, email, password required!");
@@ -1343,18 +1189,13 @@
                         $profileCompletionMsg = "Upload profile image & get 20 LBT";
                     }
                 }
-                if($getUserDataRow->phone_no == 0){
-                    $userPhoneNo = "";
-                }else{
-                    $userPhoneNo = (string)$getUserDataRow->phone_no;
-                }
-                
+
                 $userData = array(
                     "account_type" => (string)1,
                     "id" => $getUserDataRow->id,
                     "name" => $getUserDataRow->name,
                     "email" => $getUserDataRow->email,
-                    "phone_no" => $userPhoneNo,
+                    "phone_no" => $getUserDataRow->phone_no,
                     "address" => $getUserDataRow->address,
                     "wallet_id" => $getUserDataRow->wallet_id,
                     "wallet_point" => number_format((float)$getUserDataRow->wallet_point, 2, '.', ''),
@@ -1376,7 +1217,7 @@
                     "width" => $getUserDataRow->width,
                     "member_since"=> date("Y",strtotime($getUserDataRow->added_on)),
                     "kyc_verify"=>$getUserDataRow->kyc_verify,
-                    "walk_reward_point"=>"0.01",
+                    "walk_reward_point"=>"0.00001",
                     "timezone"=>$getUserDataRow->timezone,
                     "is_logged_in"=>$getUserDataRow->is_logged_in
                 );
@@ -2098,7 +1939,6 @@
             $operation = new Operation();
             $addedTime = 30;
             $checkData = $operation->get_data("walkearn_user_time_history",'*',array("user_id"=>$userId,"date"=>$todayDate),"id","DESC");
-            // echo "<pre>";print_r($checkData);die();
             if($checkData["num_rows"] == 0){
                 $dataToInsert = array(
                     "user_id"=>$userId,
@@ -2178,131 +2018,88 @@
             $caloriesValue = $this->input_post("calories_value");
             $timeValues = 30;//$this->input_post("time_values");
             $dateRange = $this->input_get("date_range");
-
-            $dataJson =  $this->input_post("data");
-            $dataArr = json_decode($dataJson);
-            
-
             if(strlen($dateRange) == 0){
                 $dateRange = 1;
             }
             $date = date("Y-m-d",time());
 
-            if(count($dataArr) > 0){
-                foreach($dataArr as $dataArrRow){
-                    $totalCoins = $dataArrRow->total_coins;
-                    $stepCount = $dataArrRow->step_count;
-                    $datetime = $dataArrRow->datetime;
-                    $distanceValue = $dataArrRow->distance_value;
-                    $caloriesValue = $dataArrRow->calories_value;
+            if( (strlen($userId)>0) && (strlen($totalCoins)>0) && (strlen($stepCount)>0) && (strlen($datetime)>0) && (strlen($distanceValue)>0) && (strlen($caloriesValue)>0) && (strlen($timeValues)>0) ){
+                $getUserDailyData = $operation->get_data("walkearn_user_history",'id,user_id,date',array("user_id"=>$userId,"date"=>date("Y-m-d",strtotime($datetime)),"hour"=> date("H",strtotime($datetime)) ));
+                
+                $this->update_user_walk_earn_time($userId,date("Y-m-d",strtotime($datetime)),$totalCoins,$stepCount);
+                
+                if($getUserDailyData["num_rows"] > 0){
+                    $this->db = \Config\Database::connect();
+                    $builder = $this->db->table("users");
+                    $walletPoint = 'wallet_point+'.$totalCoins;
+                    $builder->set('wallet_point', $walletPoint, FALSE);
+                    $builder->where(array("id"=>$userId));
+                    $builder->update();
+                    $transactionData = array(
+                        "user_id"=>$userId,
+                        "type"=>1,
+                        "points"=>$totalCoins,
+                        "details"=>"Walk and earn Reward"
+                    );
+                    $operation->insert_data("user_wallet_transaction",$transactionData);
 
-                    if( (strlen($userId)>0) && (strlen($totalCoins)>0) && (strlen($stepCount)>0) && (strlen($datetime)>0) && (strlen($distanceValue)>0) && (strlen($caloriesValue)>0) && (strlen($timeValues)>0) ){
-                        $getUserDailyData = $operation->get_data("walkearn_user_history",'id,user_id,date',array("user_id"=>$userId,"date"=>date("Y-m-d",strtotime($datetime)),"hour"=> date("H",strtotime($datetime)) ));
-                        
-                        $this->update_user_walk_earn_time($userId,date("Y-m-d",strtotime($datetime)),$totalCoins,$stepCount);
-                        // echo "<pre>";print_r($getUserDailyData);die();
-                        if($getUserDailyData["num_rows"] > 0){
-                            $this->db = \Config\Database::connect();
-                            $builder = $this->db->table("users");
-                            $walletPoint = 'wallet_point+'.$totalCoins;
-                            $builder->set('wallet_point', $walletPoint, FALSE);
-                            $builder->where(array("id"=>$userId));
-                            $builder->update();
-                            $checkTodaysWalkEarnData =  $operation->get_data("user_wallet_transaction",'id,user_id,added_on',array("user_id"=>$userId ),"added_on","DESC","1","0",array("added_on"=>date("Y-m-d",strtotime($datetime)) ));
-        
-                            if($checkTodaysWalkEarnData["num_rows"] > 0){
-                                $this->db = \Config\Database::connect();
-                                $builder = $this->db->table("user_wallet_transaction");
-                                $totalTime = 'points+'.$totalCoins;
-                                $builder->set('points', $totalTime,FALSE);
-                                $builder->set('added_on', date("Y-m-d H:s:i",strtotime($datetime)));
-                                $builder->where(array("user_id"=>$userId));
-                                $builder->where(array("id"=>$checkTodaysWalkEarnData["result"][0]->id));
-                                $builder->update();
-                            }else{
-                                $transactionData = array(
-                                    "user_id"=>$userId,
-                                    "type"=>1,
-                                    "points"=>$totalCoins,
-                                    "details"=>"Walk and earn Reward"
-                                );
-                                $operation->insert_data("user_wallet_transaction",$transactionData);
-                            }
-        
-                            
-        
-        
-        
-                            $this->db = \Config\Database::connect();
-                            $builder = $this->db->table("walkearn_user_history");
-                            $totalCoins = 'total_coins+'.$totalCoins;
-                            $stepCount = 'step_count+'.$stepCount;
-                            $distanceValue = 'distance_value+'.$distanceValue;
-                            $caloriesValue = 'calories_value+'.$caloriesValue;
-                            $timeValues = 'time_values+'.$timeValues;
-        
-                            $datetime = date("Y-m-d H:i:s",strtotime($datetime));
-                            $dateHour = date("H",strtotime($datetime));
-                            
-                            $builder->set('total_coins', $totalCoins,FALSE);
-                            $builder->set('step_count', $stepCount,FALSE);
-                            $builder->set('distance_value', $distanceValue,FALSE);
-                            $builder->set('calories_value', $caloriesValue,FALSE);
-                            $builder->set('time_values', $timeValues,FALSE);
-                            $builder->set('datetime', $datetime);
-                            
-                            $builder->where(array("user_id"=>$userId));
-                            $builder->where(array("date"=>date("Y-m-d",strtotime($datetime)),"hour"=>$dateHour));
-                            $builder->update();
-                        }else{
-                            $dataToInsert = array(
-                                "user_id"=>$userId,
-                                "total_coins"=>$totalCoins,
-                                "step_count"=>$stepCount,
-                                "datetime"=>date("Y-m-d H:i:s",strtotime($datetime)),
-                                "date"=>date("Y-m-d",strtotime($datetime)),
-                                "hour"=> date("H",strtotime($datetime)),
-                                "day"=> date("d",strtotime($datetime)),
-                                "distance_value"=>$distanceValue,
-                                "calories_value"=>$caloriesValue,
-                                "time_values"=>$timeValues
-                            );
-                            $added = $operation->insert_data("walkearn_user_history",$dataToInsert);
-        
-                            $this->db = \Config\Database::connect();
-                            $builder = $this->db->table("users");
-                            $walletPoint = 'wallet_point+'.$totalCoins;
-                            $builder->set('wallet_point', $walletPoint, FALSE);
-                            $builder->where(array("id"=>$userId));
-                            $builder->update();
-        
-                            $checkTodaysWalkEarnData =  $operation->get_data("user_wallet_transaction",'id,user_id,added_on',array("user_id"=>$userId ),"added_on","DESC","1","0",array("added_on"=>date("Y-m-d",strtotime($datetime)) ));
-                            if($checkTodaysWalkEarnData["num_rows"] > 0){
-                                $this->db = \Config\Database::connect();
-                                $builder = $this->db->table("user_wallet_transaction");
-                                $totalTime = 'points+'.$totalCoins;
-                                $builder->set('points', $totalTime,FALSE);
-                                $builder->set('added_on', date("Y-m-d H:s:i",strtotime($datetime)));
-                                $builder->where(array("user_id"=>$userId));
-                                $builder->where(array("id"=>$checkTodaysWalkEarnData["result"][0]->id));
-                                $builder->update();
-                            }else{
-                                $transactionData = array(
-                                    "user_id"=>$userId,
-                                    "type"=>1,
-                                    "points"=>$totalCoins,
-                                    "details"=>"Walk and earn Reward"
-                                );
-                                $operation->insert_data("user_wallet_transaction",$transactionData);
-                            }
-                        }
-        
-                        // $getUserDailyData = $operation->get_data("walkearn_user_history",'*',array("user_id"=>$userId,"date"=>date("Y-m-d",strtotime($datetime))));
-                        // $returnArr = $getUserDailyData["result"][0];
-                    }else{
-                        return $this->error_response("Sorry! missing params!");
-                    }
+
+
+                    $this->db = \Config\Database::connect();
+                    $builder = $this->db->table("walkearn_user_history");
+                    $totalCoins = 'total_coins+'.$totalCoins;
+                    $stepCount = 'step_count+'.$stepCount;
+                    $distanceValue = 'distance_value+'.$distanceValue;
+                    $caloriesValue = 'calories_value+'.$caloriesValue;
+                    $timeValues = 'time_values+'.$timeValues;
+
+                    $datetime = date("Y-m-d H:i:s",strtotime($datetime));
+                    $dateHour = date("H",strtotime($datetime));
+                    
+                    $builder->set('total_coins', $totalCoins,FALSE);
+                    $builder->set('step_count', $stepCount,FALSE);
+                    $builder->set('distance_value', $distanceValue,FALSE);
+                    $builder->set('calories_value', $caloriesValue,FALSE);
+                    $builder->set('time_values', $timeValues,FALSE);
+                    $builder->set('datetime', $datetime);
+                    
+                    $builder->where(array("user_id"=>$userId));
+                    $builder->where(array("date"=>date("Y-m-d",strtotime($datetime)),"hour"=>$dateHour));
+                    $builder->update();
+                }else{
+                    $dataToInsert = array(
+                        "user_id"=>$userId,
+                        "total_coins"=>$totalCoins,
+                        "step_count"=>$stepCount,
+                        "datetime"=>date("Y-m-d H:i:s",strtotime($datetime)),
+                        "date"=>date("Y-m-d",strtotime($datetime)),
+                        "hour"=> date("H",strtotime($datetime)),
+                        "day"=> date("d",strtotime($datetime)),
+                        "distance_value"=>$distanceValue,
+                        "calories_value"=>$caloriesValue,
+                        "time_values"=>$timeValues
+                    );
+                    $added = $operation->insert_data("walkearn_user_history",$dataToInsert);
+
+                    $this->db = \Config\Database::connect();
+                    $builder = $this->db->table("users");
+                    $walletPoint = 'wallet_point+'.$totalCoins;
+                    $builder->set('wallet_point', $walletPoint, FALSE);
+                    $builder->where(array("id"=>$userId));
+                    $builder->update();
+                    $transactionData = array(
+                        "user_id"=>$userId,
+                        "type"=>1,
+                        "points"=>$totalCoins,
+                        "details"=>"Walk and earn Reward"
+                    );
+                    $operation->insert_data("user_wallet_transaction",$transactionData);
                 }
+
+                // $getUserDailyData = $operation->get_data("walkearn_user_history",'*',array("user_id"=>$userId,"date"=>date("Y-m-d",strtotime($datetime))));
+                // $returnArr = $getUserDailyData["result"][0];
+                
+
                 if( (strlen($dateRange) == 0) || ($dateRange == 1) ){
                     $endDate = $startDate = date("Y-m-d",strtotime($date));
                 }else if($dateRange == "7"){
@@ -2498,6 +2295,10 @@
                     );
                     return $this->success_response("No walking history found!",$returnData);
                 }
+
+
+            }else{
+                return $this->error_response("Sorry! missing params!");
             }
         }
 
@@ -3425,205 +3226,10 @@
                 return $this->error_response("User id missing!");
             }
             
-        }
-
-        public function account_inactive(){
-            $operation = new Operation();
-            $user_id =$this->input_post("user_id");
-            $type =$this->input_post("type"); // 1=de-active, 2=delete account
-            if( (strlen($user_id)>0) && (strlen($type)>0) ){
-                $checkUser = $operation->get_data("users",'id,status',array("id"=>$user_id));
-                if($checkUser["num_rows"] > 0){
-                    if($type == 1){
-                        $action=$operation->update_data("users",array('id'=>$user_id),array("status"=>2));
-                        return $this->success_response("Good bye! Your account deactivated!");
-                    }else if($type == 2){
-                        $operation->delete_data("walkearn_user_time_history",array("user_id"=>$user_id));
-                        $operation->delete_data("walkearn_user_history",array("user_id"=>$user_id));
-                        $operation->delete_data("user_wallet_transaction",array("user_id"=>$user_id));
-                        $operation->delete_data("user_review",array("user_id"=>$user_id));
-                        $operation->delete_data("user_otp",array("user_id"=>$user_id));
-                        $operation->delete_data("user_kyc",array("user_id"=>$user_id));
-                        $operation->delete_data("user_health",array("user_id"=>$user_id));
-                        $operation->delete_data("user_family_members",array("user_id"=>$user_id));
-                        $operation->delete_data("user_daily_check_in",array("user_id"=>$user_id));
-                        $operation->delete_data("user_health",array("user_id"=>$user_id));
-                        $operation->delete_data("users",array("id"=>$user_id));
-                        $operation->update_data("user_referral",array('referred_by'=>$user_id),array("referred_by"=>1));
-                        return $this->success_response("Good bye! Your account deleted!");
-                    }
-                }else{
-                    return $this->error_response("Sorry! Invalid user");
-                }
-            }else{
-                return $this->error_response("user id and type is required!");
-            }
-        }
-
-        public function checking_one(){
-            $operation = new Operation();
-            $mailer =  new Mailler();
-            $type = $this->input_post("check_type");  // 1= email, 2= phone, 3=referral
-            $value = $this->input_post("check_value");
-            if($type == 1){
-                if( (strlen($value) >0 )){
-                    $checkData = $operation->get_data("users",'id,email',array("email"=>$value));
-                    $returnSucMsg = "This email is available for registration";
-                    $returnErrMsg = "This email already exist";
-                }else{
-                    return $this->error_response("Sorry! Invalid Request!");
-                }
-            }else if($type == 2){
-                if( (strlen($value) >0 )){
-                    $checkData = $operation->get_data("users",'id,phone_no',array("phone_no"=>$value));
-                    $returnSucMsg = "This phone no is available for registration";
-                    $returnErrMsg = "This phone no already exist";
-                }else{
-                    return $this->error_response("Sorry! Invalid Request!");
-                }
-            }else if($type == 3){
-                $checkData = $operation->get_data("users",'*',array("referral_code"=>$value));
-                $returnErrMsg = "This referral code is valid";
-                $returnSucMsg = "This referral code is invalid";
-            }else if($type == 4){
-                $email = $this->input_post("email");
-                $phone = $this->input_post("phone");
-                $referral = $this->input_post("referral");
-                $hasErr = 0;
-                if( (strlen($email) == 0) && (strlen($phone) == 0) ){
-                    return $this->error_response("Sorry! Email or phone is required!");
-                }
-                if(strlen($email) > 0){
-                    $checkData = $operation->get_data("users",'id,email',array("email"=>$email));
-                    if($checkData["num_rows"] > 0){
-                        $returnEmailMsg = "This email already exist";
-                        $returnEmailStatus = false;
-                        $hasErr++;
-                    }else{
-                        $returnEmailMsg = "This email is available for registration";
-                        $returnEmailStatus = true;
-                    }
-                }else{
-                    $returnEmailMsg = "Email not provided";
-                    $returnEmailStatus = true;
-                }
-
-                if(strlen($phone) > 0){
-                    $checkData = $operation->get_data("users",'id,phone_no',array("phone_no"=>$phone));
-                    if($checkData["num_rows"] > 0){
-                        $returnPhoneMsg = "This phone already exist";
-                        $returnPhoneStatus = false;
-                        $hasErr++;
-                    }else{
-                        $returnPhoneMsg = "This phone is available for registration";
-                        $returnPhoneStatus = true;
-                    }
-                }else{
-                    $returnPhoneMsg = "Phone no not provided";
-                    $returnPhoneStatus = true;
-                }
-
-                if(strlen($referral) > 0){
-                    $checkData = $operation->get_data("users",'*',array("referral_code"=>$referral));
-                    if($checkData["num_rows"] > 0){
-                        $returnReferralMsg = "This referral code is valid";
-                        $returnReferralStatus = true;
-                    }else{
-                        $returnReferralMsg = "This referral code is invalid";
-                        $returnReferralStatus = false;
-                        $hasErr++;
-                    }
-                }else{
-                    $returnReferralMsg = "Referral code is not provided";
-                    $returnReferralStatus = true;
-                }
-                if($hasErr == 0){
-                    if(strlen($email) > 0){
-                        $otp = rand(100001,999999);
-                        $returnArr = array(
-                            "otp"=>(string)$otp
-                        );
-                        $variables = array();
-                        $variables['OTP'] = $otp;
-                        $emailTemplate = $operation->get_data("email_template","*",array("id"=>3));
-                        $template=$emailTemplate["result"][0]->template;
-                        foreach($variables as $key => $value){
-                            $template = str_replace('['.$key.']', $value, $template);
-                        }
-                        $subject = "otp Verification.";
-                        $sentMail=$mailer->sent_email($email,$email,$subject,$template);
-                    }
-                }
-                $returnArr["email"] = array("message"=>$returnEmailMsg,"status"=>$returnEmailStatus);
-                $returnArr["phone"] = array("message"=>$returnPhoneMsg,"status"=>$returnPhoneStatus);
-                $returnArr["referral"] = array("message"=>$returnReferralMsg,"status"=>$returnReferralStatus);
-                return $this->success_response("checking response",$returnArr);
-            }else{
-                return $this->error_response("Sorry! Invalid Request!");
-            }
-
-            if($checkData["num_rows"] > 0){
-                return $this->error_response($returnErrMsg);
-            }else{
-                return $this->success_response($returnSucMsg);
-            }
-        }
+            
+           
 
 
-        public function update_premium(){
-            $operation = new Operation();
-            $userId = $this->input_post("user_id");
-            $type = $this->input_post("type");
-            $image = $this->input_file("image");
-            if( (strlen($userId) >0 ) && (strlen($type) >0 ) ){
-                $dataInsert = array();
-                if(!empty($image)){
-                    if(  $image->getSize() != 0 ){
-                        $newFileName = md5(time()).'-'.$image->getRandomName();
-                        $uploadFileName = "lbt-premium-".date("Y-m-d")."-".$userId."-".$newFileName;
-                        if (! $image->isValid()) {
-                            return $this->error_response("Sorry!".$image->getErrorString());
-                        }else{
-                            $targetDir = APIASSETSPATH."premium_image/";
-                            $uploadImage = $image->move($targetDir,$uploadFileName);
-                            $dataInsert["image"] = BASEPATH."public/files/premium_image/".$uploadFileName;
-                            $updateUser = $operation->update_data("users",array("id"=>$userId),array("premium"=>1));
-                            $dataInsert["user_id"]=$userId;
-                            $dataInsert["type"]=$type;
-                            $insertNotification=$operation->insert_data("user_premium_request",$dataInsert);
-                            return $this->success_response("premium request submitted!");
-                        }
-                    }
-                }else{
-                    return $this->error_response("Sorry! image required!");
-                }
-                
-            }else{
-                return $this->error_response("Sorry! user_id and type required!");
-            }
-        }
-
-        public function users_premium_status(){
-            $operation = new Operation();
-            $userId = $this->input_get("user_id");
-            $checkData = $operation->get_data("users","id,premium",array("id"=>$userId));
-            if($checkData["num_rows"] > 0){
-                $returnData = array();
-                if($checkData["result"][0]->premium == 0){
-                    $returnData["premium_status_str"] = "Payment Screen sort not uploaded.";
-                    $returnData["premium_status"] = "0";
-                }else if($checkData["result"][0]->premium == 1){
-                    $returnData["premium_status_str"] = "Pending";
-                    $returnData["premium_status"] = "1";
-                }else if($checkData["result"][0]->premium == 2){
-                    $returnData["premium_status_str"] = "Premium User";
-                    $returnData["premium_status"] = "1";
-                }
-
-                return $this->success_response("premium status!",$returnData);
-            }else{
-                return $this->error_response("Sorry! user_id invalid!");
-            }
         }
     }
 

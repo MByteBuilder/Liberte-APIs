@@ -2098,7 +2098,6 @@
             $operation = new Operation();
             $addedTime = 30;
             $checkData = $operation->get_data("walkearn_user_time_history",'*',array("user_id"=>$userId,"date"=>$todayDate),"id","DESC");
-            // echo "<pre>";print_r($checkData);die();
             if($checkData["num_rows"] == 0){
                 $dataToInsert = array(
                     "user_id"=>$userId,
@@ -2200,7 +2199,7 @@
                         $getUserDailyData = $operation->get_data("walkearn_user_history",'id,user_id,date',array("user_id"=>$userId,"date"=>date("Y-m-d",strtotime($datetime)),"hour"=> date("H",strtotime($datetime)) ));
                         
                         $this->update_user_walk_earn_time($userId,date("Y-m-d",strtotime($datetime)),$totalCoins,$stepCount);
-                        // echo "<pre>";print_r($getUserDailyData);die();
+                        
                         if($getUserDailyData["num_rows"] > 0){
                             $this->db = \Config\Database::connect();
                             $builder = $this->db->table("users");
@@ -2299,204 +2298,208 @@
         
                         // $getUserDailyData = $operation->get_data("walkearn_user_history",'*',array("user_id"=>$userId,"date"=>date("Y-m-d",strtotime($datetime))));
                         // $returnArr = $getUserDailyData["result"][0];
+                        
+        
+                        if( (strlen($dateRange) == 0) || ($dateRange == 1) ){
+                            $endDate = $startDate = date("Y-m-d",strtotime($date));
+                        }else if($dateRange == "7"){
+                            $endDate = date("Y-m-d",strtotime($date));
+                            $startDate = date('Y-m-d', strtotime($date. ' - 6 days'));
+                        }else if($dateRange == "30"){
+                            $endDate = date("Y-m-d",strtotime($date));
+                            $startDate = date('Y-m-d', strtotime($date. ' - 30 days'));
+                        }else{
+                            return $this->error_response("Sorry! invalid date!");
+                        }
+        
+                        $commonData["date_range"] = (string)$dateRange;
+                        $commonData["start_date"] = $startDate;
+                        $commonData["end_date"] = $endDate;
+        
+                        $commonData["total_coins"] = "0";
+                        $commonData["avg_coins"] = "0";
+        
+                        $commonData["total_step"] = "0";
+                        $commonData["avg_step"] = "0";
+        
+                        $commonData["total_distance"] = "0";
+                        $commonData["avg_distance"] = "0";
+        
+                        $commonData["total_calories"] = "0";
+                        $commonData["avg_calories"] = "0";
+        
+                        $commonData["total_time"] = "0";
+                        $commonData["avg_time"] = "0";
+                        $commonData["total_walking_time"] = (string)$this->today_total_walk_time($userId);
+                        
+                        $searchCondition = array("user_id"=>$userId);
+        
+                        if($dateRange > 1){
+                            $searchCondition = array_merge($searchCondition,array("date <="=>date("Y-m-d",strtotime($endDate))));
+                            $searchCondition = array_merge($searchCondition,array("date >="=>date("Y-m-d",strtotime($startDate))));
+                        }else{
+                            $searchCondition = array_merge($searchCondition,array("date"=>date("Y-m-d",strtotime($startDate))));
+                        }
+        
+                        $getUserData = $operation->get_data("walkearn_user_history",'*',$searchCondition);
+                        $returnArr = array();
+                        $userPoint = $operation->get_data("users",'id,wallet_point',array("id"=>$userId),"id","DESC");
+                        $userWalletPoint=(string)$userPoint["result"][0]->wallet_point;
+                        if($getUserData["num_rows"] > 0){
+                            $returnArr = array();
+                            if($dateRange == 1){
+                                for($currIndex = 0; $currIndex < 24; $currIndex++){
+                                    $returnArr[$currIndex] = array(
+                                        "day"=>(string)date("d", strtotime($date)),
+                                        "month"=>(string)date("M", strtotime($date)),
+                                        "total_coins"=>(string)0,
+                                        "step_count"=>(string)0,
+                                        "distance_value"=>(string)0,
+                                        "calories_value"=>(string)0,
+                                        "time_values"=>(string)0
+                                    );
+                                }
+                                $totalStep = 0;
+                                $totalCoins = 0;
+                                $totalDistance = 0;
+                                $totalCalories = 0;
+                                $totalTime = 0;
+                                $avgCounter = 24;
+                                foreach($returnArr as $returnArrRowKey=>$returnArrRow){
+                                    foreach($getUserData["result"] as $getUserDataRow){
+                                        if($getUserDataRow->hour == $returnArrRowKey){
+                                            $returnArr[$returnArrRowKey]["date"] = (string)$getUserDataRow->date;
+                                            $returnArr[$returnArrRowKey]["hour"] = (string)$getUserDataRow->hour;
+                                            $returnArr[$returnArrRowKey]["total_coins"] = (string)$getUserDataRow->total_coins;
+                                            $returnArr[$returnArrRowKey]["step_count"] = (string)$getUserDataRow->step_count;
+                                            $returnArr[$returnArrRowKey]["distance_value"] = (string)$getUserDataRow->distance_value; 
+                                            $returnArr[$returnArrRowKey]["calories_value"] = (string)$getUserDataRow->calories_value; 
+                                            $returnArr[$returnArrRowKey]["time_values"] = (string)$getUserDataRow->time_values;
+        
+                                            $totalCoins = $totalCoins+$getUserDataRow->total_coins; 
+                                            $totalStep = $totalStep+$getUserDataRow->step_count; 
+                                            $totalDistance = $totalDistance+$getUserDataRow->distance_value; 
+                                            $totalCalories = $totalCalories+$getUserDataRow->calories_value; 
+                                            $totalTime = $totalTime+$getUserDataRow->time_values; 
+                                        }
+                                    }
+                                }
+                                
+                            }else if($dateRange == 7){
+                                $loopStart = date("d",strtotime($startDate));
+                                $returnArr = array();
+                                for($currIndex = 0; $currIndex < 7; $currIndex++){
+                                    $currIndexVal = date('d', strtotime($startDate. ' + '.$currIndex.' days'));
+                                    $currMonthVal = date('M', strtotime($startDate. ' + '.$currIndex.' days'));
+                                    $returnArr[$currIndex] = array(
+                                        "day"=>(string)$currIndexVal,
+                                        "month"=>(string)$currMonthVal,
+                                        "total_coins"=>(string)0,
+                                        "step_count"=>(string)0,
+                                        "distance_value"=>(string)0,
+                                        "calories_value"=>(string)0,
+                                        "time_values"=>(string)0
+                                    );  
+                                }
+                                $totalStep = 0;
+                                $totalCoins = 0;
+                                $totalDistance = 0;
+                                $totalCalories = 0;
+                                $totalTime = 0;
+                                $avgCounter = 7;
+                                foreach($returnArr as $returnArrRowKey=>$returnArrRow){
+                                    foreach($getUserData["result"] as $getUserDataRow){
+                                        if($getUserDataRow->day == $returnArrRowKey){
+                                            $returnArr[$returnArrRowKey]["total_coins"] = (string)($returnArr[$returnArrRowKey]["total_coins"]+$getUserDataRow->total_coins);
+                                            $returnArr[$returnArrRowKey]["step_count"] = (string)($returnArr[$returnArrRowKey]["step_count"]+$getUserDataRow->step_count); 
+                                            $totalStep = $totalStep+$getUserDataRow->step_count; 
+                                            $returnArr[$returnArrRowKey]["distance_value"] = (string)($returnArr[$returnArrRowKey]["distance_value"]+$getUserDataRow->distance_value); 
+                                            $returnArr[$returnArrRowKey]["calories_value"] = (string)($returnArr[$returnArrRowKey]["calories_value"]+$getUserDataRow->calories_value); 
+                                            $returnArr[$returnArrRowKey]["time_values"] = (string)($returnArr[$returnArrRowKey]["time_values"]+$getUserDataRow->time_values);
+        
+                                            $totalCoins = $totalCoins+$getUserDataRow->total_coins; 
+                                            $totalStep = $totalStep+$getUserDataRow->step_count; 
+                                            $totalDistance = $totalDistance+$getUserDataRow->distance_value; 
+                                            $totalCalories = $totalCalories+$getUserDataRow->calories_value; 
+                                            $totalTime = $totalTime+$getUserDataRow->time_values; 
+                                        }
+                                    }
+                                }
+        
+                                
+                            }else if($dateRange == 30){
+                                $indexStop = date('t',strtotime($date));
+                                $currMonthVal = date('M',strtotime($date));
+                                for($currIndex = 0; $currIndex < $indexStop; $currIndex++){
+                                    $returnArr[$currIndex] = array();
+                                    $returnArr[$currIndex]["day"] = (string)($currIndex+1);
+                                    $returnArr[$currIndex]["month"] = (string)$currMonthVal;
+                                    $returnArr[$currIndex]["total_coins"] = "0";
+                                    $returnArr[$currIndex]["step_count"] = "0"; 
+                                    $returnArr[$currIndex]["distance_value"] = "0"; 
+                                    $returnArr[$currIndex]["calories_value"] = "0"; 
+                                    $returnArr[$currIndex]["time_values"] = "0";
+                                }
+                                $totalStep = 0;
+                                $totalCoins = 0;
+                                $totalDistance = 0;
+                                $totalCalories = 0;
+                                $totalTime = 0;
+                                $avgCounter = $indexStop;
+                                foreach($returnArr as $returnArrRowKey=>$returnArrRow){
+                                    foreach($getUserData["result"] as $getUserDataRow){
+                                        if($getUserDataRow->day == $returnArrRowKey){
+                                            $returnArr[$returnArrRowKey]["total_coins"] = (string)($returnArr[$returnArrRowKey]["total_coins"]+$getUserDataRow->total_coins);
+                                            $returnArr[$returnArrRowKey]["step_count"] = (string)($returnArr[$returnArrRowKey]["step_count"]+$getUserDataRow->step_count); 
+                                            $totalStep = $totalStep+$getUserDataRow->step_count; 
+                                            $returnArr[$returnArrRowKey]["distance_value"] = (string)($returnArr[$returnArrRowKey]["distance_value"]+$getUserDataRow->distance_value); 
+                                            $returnArr[$returnArrRowKey]["calories_value"] = (string)($returnArr[$returnArrRowKey]["calories_value"]+$getUserDataRow->calories_value); 
+                                            $returnArr[$returnArrRowKey]["time_values"] = (string)($returnArr[$returnArrRowKey]["time_values"]+$getUserDataRow->time_values);
+        
+                                            $totalCoins = $totalCoins+$getUserDataRow->total_coins; 
+                                            $totalStep = $totalStep+$getUserDataRow->step_count; 
+                                            $totalDistance = $totalDistance+$getUserDataRow->distance_value; 
+                                            $totalCalories = $totalCalories+$getUserDataRow->calories_value; 
+                                            $totalTime = $totalTime+$getUserDataRow->time_values; 
+                                        }
+                                    }
+                                }
+                            }
+                            $commonData["total_step"] = (string)$totalStep;
+                            $commonData["avg_step"] = (string)round($totalStep/$avgCounter);
+                            
+                            $commonData["total_coins"] = (string)$totalCoins;
+                            $commonData["avg_coins"] = (string)round($totalCoins/$avgCounter);
+        
+                            $commonData["total_distance"] = (string)$totalDistance;
+                            $commonData["avg_distance"] = (string)round($totalDistance/$avgCounter);
+        
+                            $commonData["total_calories"] = (string)$totalCalories;
+                            $commonData["avg_calories"] = (string)round($totalCalories/$avgCounter);
+        
+                            $commonData["total_time"] = (string)$totalTime;
+                            $commonData["avg_time"] = (string)round($totalTime/$avgCounter);
+                            $returnData = array(
+                                "user_wallet_point" => $userWalletPoint,
+                                "common_data" => $commonData,
+                                "graph_data" => $returnArr,
+                                "top_user"=>$this->top_walker()
+                            );
+                            return $this->success_response("Walking history!",$returnData);
+                        }else{
+                            $returnData = array(
+                                "user_wallet_point" => $userWalletPoint,
+                                "common_data" => $commonData,
+                                "graph_data" => $returnArr,
+                                "top_user"=>$this->top_walker()
+                            );
+                            return $this->success_response("No walking history found!",$returnData);
+                        }
+        
+        
                     }else{
                         return $this->error_response("Sorry! missing params!");
                     }
-                }
-                if( (strlen($dateRange) == 0) || ($dateRange == 1) ){
-                    $endDate = $startDate = date("Y-m-d",strtotime($date));
-                }else if($dateRange == "7"){
-                    $endDate = date("Y-m-d",strtotime($date));
-                    $startDate = date('Y-m-d', strtotime($date. ' - 6 days'));
-                }else if($dateRange == "30"){
-                    $endDate = date("Y-m-d",strtotime($date));
-                    $startDate = date('Y-m-d', strtotime($date. ' - 30 days'));
-                }else{
-                    return $this->error_response("Sorry! invalid date!");
-                }
-
-                $commonData["date_range"] = (string)$dateRange;
-                $commonData["start_date"] = $startDate;
-                $commonData["end_date"] = $endDate;
-
-                $commonData["total_coins"] = "0";
-                $commonData["avg_coins"] = "0";
-
-                $commonData["total_step"] = "0";
-                $commonData["avg_step"] = "0";
-
-                $commonData["total_distance"] = "0";
-                $commonData["avg_distance"] = "0";
-
-                $commonData["total_calories"] = "0";
-                $commonData["avg_calories"] = "0";
-
-                $commonData["total_time"] = "0";
-                $commonData["avg_time"] = "0";
-                $commonData["total_walking_time"] = (string)$this->today_total_walk_time($userId);
-                
-                $searchCondition = array("user_id"=>$userId);
-
-                if($dateRange > 1){
-                    $searchCondition = array_merge($searchCondition,array("date <="=>date("Y-m-d",strtotime($endDate))));
-                    $searchCondition = array_merge($searchCondition,array("date >="=>date("Y-m-d",strtotime($startDate))));
-                }else{
-                    $searchCondition = array_merge($searchCondition,array("date"=>date("Y-m-d",strtotime($startDate))));
-                }
-
-                $getUserData = $operation->get_data("walkearn_user_history",'*',$searchCondition);
-                $returnArr = array();
-                $userPoint = $operation->get_data("users",'id,wallet_point',array("id"=>$userId),"id","DESC");
-                $userWalletPoint=(string)$userPoint["result"][0]->wallet_point;
-                if($getUserData["num_rows"] > 0){
-                    $returnArr = array();
-                    if($dateRange == 1){
-                        for($currIndex = 0; $currIndex < 24; $currIndex++){
-                            $returnArr[$currIndex] = array(
-                                "day"=>(string)date("d", strtotime($date)),
-                                "month"=>(string)date("M", strtotime($date)),
-                                "total_coins"=>(string)0,
-                                "step_count"=>(string)0,
-                                "distance_value"=>(string)0,
-                                "calories_value"=>(string)0,
-                                "time_values"=>(string)0
-                            );
-                        }
-                        $totalStep = 0;
-                        $totalCoins = 0;
-                        $totalDistance = 0;
-                        $totalCalories = 0;
-                        $totalTime = 0;
-                        $avgCounter = 24;
-                        foreach($returnArr as $returnArrRowKey=>$returnArrRow){
-                            foreach($getUserData["result"] as $getUserDataRow){
-                                if($getUserDataRow->hour == $returnArrRowKey){
-                                    $returnArr[$returnArrRowKey]["date"] = (string)$getUserDataRow->date;
-                                    $returnArr[$returnArrRowKey]["hour"] = (string)$getUserDataRow->hour;
-                                    $returnArr[$returnArrRowKey]["total_coins"] = (string)$getUserDataRow->total_coins;
-                                    $returnArr[$returnArrRowKey]["step_count"] = (string)$getUserDataRow->step_count;
-                                    $returnArr[$returnArrRowKey]["distance_value"] = (string)$getUserDataRow->distance_value; 
-                                    $returnArr[$returnArrRowKey]["calories_value"] = (string)$getUserDataRow->calories_value; 
-                                    $returnArr[$returnArrRowKey]["time_values"] = (string)$getUserDataRow->time_values;
-
-                                    $totalCoins = $totalCoins+$getUserDataRow->total_coins; 
-                                    $totalStep = $totalStep+$getUserDataRow->step_count; 
-                                    $totalDistance = $totalDistance+$getUserDataRow->distance_value; 
-                                    $totalCalories = $totalCalories+$getUserDataRow->calories_value; 
-                                    $totalTime = $totalTime+$getUserDataRow->time_values; 
-                                }
-                            }
-                        }
-                        
-                    }else if($dateRange == 7){
-                        $loopStart = date("d",strtotime($startDate));
-                        $returnArr = array();
-                        for($currIndex = 0; $currIndex < 7; $currIndex++){
-                            $currIndexVal = date('d', strtotime($startDate. ' + '.$currIndex.' days'));
-                            $currMonthVal = date('M', strtotime($startDate. ' + '.$currIndex.' days'));
-                            $returnArr[$currIndex] = array(
-                                "day"=>(string)$currIndexVal,
-                                "month"=>(string)$currMonthVal,
-                                "total_coins"=>(string)0,
-                                "step_count"=>(string)0,
-                                "distance_value"=>(string)0,
-                                "calories_value"=>(string)0,
-                                "time_values"=>(string)0
-                            );  
-                        }
-                        $totalStep = 0;
-                        $totalCoins = 0;
-                        $totalDistance = 0;
-                        $totalCalories = 0;
-                        $totalTime = 0;
-                        $avgCounter = 7;
-                        foreach($returnArr as $returnArrRowKey=>$returnArrRow){
-                            foreach($getUserData["result"] as $getUserDataRow){
-                                if($getUserDataRow->day == $returnArrRowKey){
-                                    $returnArr[$returnArrRowKey]["total_coins"] = (string)($returnArr[$returnArrRowKey]["total_coins"]+$getUserDataRow->total_coins);
-                                    $returnArr[$returnArrRowKey]["step_count"] = (string)($returnArr[$returnArrRowKey]["step_count"]+$getUserDataRow->step_count); 
-                                    $totalStep = $totalStep+$getUserDataRow->step_count; 
-                                    $returnArr[$returnArrRowKey]["distance_value"] = (string)($returnArr[$returnArrRowKey]["distance_value"]+$getUserDataRow->distance_value); 
-                                    $returnArr[$returnArrRowKey]["calories_value"] = (string)($returnArr[$returnArrRowKey]["calories_value"]+$getUserDataRow->calories_value); 
-                                    $returnArr[$returnArrRowKey]["time_values"] = (string)($returnArr[$returnArrRowKey]["time_values"]+$getUserDataRow->time_values);
-
-                                    $totalCoins = $totalCoins+$getUserDataRow->total_coins; 
-                                    $totalStep = $totalStep+$getUserDataRow->step_count; 
-                                    $totalDistance = $totalDistance+$getUserDataRow->distance_value; 
-                                    $totalCalories = $totalCalories+$getUserDataRow->calories_value; 
-                                    $totalTime = $totalTime+$getUserDataRow->time_values; 
-                                }
-                            }
-                        }
-
-                        
-                    }else if($dateRange == 30){
-                        $indexStop = date('t',strtotime($date));
-                        $currMonthVal = date('M',strtotime($date));
-                        for($currIndex = 0; $currIndex < $indexStop; $currIndex++){
-                            $returnArr[$currIndex] = array();
-                            $returnArr[$currIndex]["day"] = (string)($currIndex+1);
-                            $returnArr[$currIndex]["month"] = (string)$currMonthVal;
-                            $returnArr[$currIndex]["total_coins"] = "0";
-                            $returnArr[$currIndex]["step_count"] = "0"; 
-                            $returnArr[$currIndex]["distance_value"] = "0"; 
-                            $returnArr[$currIndex]["calories_value"] = "0"; 
-                            $returnArr[$currIndex]["time_values"] = "0";
-                        }
-                        $totalStep = 0;
-                        $totalCoins = 0;
-                        $totalDistance = 0;
-                        $totalCalories = 0;
-                        $totalTime = 0;
-                        $avgCounter = $indexStop;
-                        foreach($returnArr as $returnArrRowKey=>$returnArrRow){
-                            foreach($getUserData["result"] as $getUserDataRow){
-                                if($getUserDataRow->day == $returnArrRowKey){
-                                    $returnArr[$returnArrRowKey]["total_coins"] = (string)($returnArr[$returnArrRowKey]["total_coins"]+$getUserDataRow->total_coins);
-                                    $returnArr[$returnArrRowKey]["step_count"] = (string)($returnArr[$returnArrRowKey]["step_count"]+$getUserDataRow->step_count); 
-                                    $totalStep = $totalStep+$getUserDataRow->step_count; 
-                                    $returnArr[$returnArrRowKey]["distance_value"] = (string)($returnArr[$returnArrRowKey]["distance_value"]+$getUserDataRow->distance_value); 
-                                    $returnArr[$returnArrRowKey]["calories_value"] = (string)($returnArr[$returnArrRowKey]["calories_value"]+$getUserDataRow->calories_value); 
-                                    $returnArr[$returnArrRowKey]["time_values"] = (string)($returnArr[$returnArrRowKey]["time_values"]+$getUserDataRow->time_values);
-
-                                    $totalCoins = $totalCoins+$getUserDataRow->total_coins; 
-                                    $totalStep = $totalStep+$getUserDataRow->step_count; 
-                                    $totalDistance = $totalDistance+$getUserDataRow->distance_value; 
-                                    $totalCalories = $totalCalories+$getUserDataRow->calories_value; 
-                                    $totalTime = $totalTime+$getUserDataRow->time_values; 
-                                }
-                            }
-                        }
-                    }
-                    $commonData["total_step"] = (string)$totalStep;
-                    $commonData["avg_step"] = (string)round($totalStep/$avgCounter);
-                    
-                    $commonData["total_coins"] = (string)$totalCoins;
-                    $commonData["avg_coins"] = (string)round($totalCoins/$avgCounter);
-
-                    $commonData["total_distance"] = (string)$totalDistance;
-                    $commonData["avg_distance"] = (string)round($totalDistance/$avgCounter);
-
-                    $commonData["total_calories"] = (string)$totalCalories;
-                    $commonData["avg_calories"] = (string)round($totalCalories/$avgCounter);
-
-                    $commonData["total_time"] = (string)$totalTime;
-                    $commonData["avg_time"] = (string)round($totalTime/$avgCounter);
-                    $returnData = array(
-                        "user_wallet_point" => $userWalletPoint,
-                        "common_data" => $commonData,
-                        "graph_data" => $returnArr,
-                        "top_user"=>$this->top_walker()
-                    );
-                    return $this->success_response("Walking history!",$returnData);
-                }else{
-                    $returnData = array(
-                        "user_wallet_point" => $userWalletPoint,
-                        "common_data" => $commonData,
-                        "graph_data" => $returnArr,
-                        "top_user"=>$this->top_walker()
-                    );
-                    return $this->success_response("No walking history found!",$returnData);
                 }
             }
         }

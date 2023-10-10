@@ -158,10 +158,6 @@ $routes->group('api', function ($routes) {
 
 		$routes->get('add-daily-checkin-reminder', 'Api\v1\Cron::add_daily_checkin_reminder');
 		$routes->get('send-daily-checkin-reminder', 'Api\v1\Cron::send_daily_checkin_reminder');
-
-
-		$routes->post('update-premium', 'Api\v1\Users::update_premium');
-		$routes->get('users-premium-status', 'Api\v1\Users::users_premium_status');
 	});
 	
 });
